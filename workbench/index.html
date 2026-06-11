@@ -1,0 +1,891 @@
+<!doctype html><html lang="en-GB"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>IR35 Workbench — Ascend Workforce Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;550;600;650;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#003182; --navy2:#001E5A; --teal:#218380; --teal-d:#176561;
+    --magenta:#9C2373; --ink:#231F20; --muted:#6b7280; --line:#DBDBDB;
+    --bg:#F5F5F6; --card:#ffffff; --green:#218380; --amber:#003182; --red:#9C2373;
+    --green-bg:#E3F0EF; --amber-bg:#E6EBF5; --red-bg:#F5E4EF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Mulish',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
+  .banner{background:#FBF3DA;color:#7a5c00;text-align:center;font-size:12px;
+    padding:6px;border-bottom:1px solid #EAD89C;letter-spacing:.2px}
+  header{background:#0C365F;color:#fff;padding:16px 28px;display:flex;align-items:center;gap:16px}
+  header .logo{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--teal-d));
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:15px}
+  header h1{font-size:18px;font-weight:650;letter-spacing:.2px}
+  header .sub{color:#9fb2c6;font-size:12px;margin-top:2px}
+  header .right{margin-left:auto;text-align:right;font-size:12px;color:#9fb2c6}
+  header .right b{color:#fff;display:block;font-size:13px}
+  nav{background:var(--navy2);display:flex;gap:2px;padding:0 18px;position:sticky;top:0;z-index:10}
+  nav button{background:none;border:none;color:#9fb2c6;padding:13px 18px;font-size:13.5px;cursor:pointer;
+    border-bottom:3px solid transparent;font-weight:550;transition:.15s}
+  nav button:hover{color:#fff}
+  nav button.active{color:#fff;border-bottom-color:var(--teal)}
+  main{padding:24px 28px;max-width:1240px;margin:0 auto}
+  .view{display:none}.view.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h2{font-size:17px;margin-bottom:4px}
+  .lead{color:var(--muted);margin-bottom:18px;font-size:13px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .kpi .label{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .kpi .val{font-size:26px;font-weight:700;margin-top:6px}
+  .kpi .delta{font-size:11.5px;margin-top:3px}
+  .kpi .delta.up{color:var(--green)} .kpi .delta.dn{color:var(--red)}
+  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h3{font-size:13.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;
+    letter-spacing:.3px;padding:9px 10px;border-bottom:2px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line)}
+  tr:hover td{background:#fafcfe}
+  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600}
+  .p-out{background:var(--green-bg);color:var(--green)}
+  .p-in{background:var(--red-bg);color:var(--red)}
+  .p-border{background:var(--amber-bg);color:#003182}
+  .p-pending{background:#eef1f5;color:var(--muted)}
+  .bar{height:7px;border-radius:5px;background:#eef1f5;overflow:hidden;margin-top:5px}
+  .bar > span{display:block;height:100%;background:var(--teal)}
+  .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+  .toolbar input,.toolbar select{padding:8px 11px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff}
+  .toolbar input{flex:1;min-width:180px}
+  .chip{font-size:12px;color:var(--muted)}
+  /* assessment */
+  .q{padding:16px 0;border-bottom:1px solid var(--line)}
+  .q:last-child{border:none}
+  .q .qt{font-weight:600;margin-bottom:4px}
+  .q .qh{color:var(--muted);font-size:12px;margin-bottom:10px}
+  .opts{display:flex;gap:8px;flex-wrap:wrap}
+  .opts label{border:1px solid var(--line);border-radius:8px;padding:8px 13px;cursor:pointer;font-size:13px;transition:.12s}
+  .opts input{display:none}
+  .opts label:hover{border-color:var(--teal)}
+  .opts input:checked + span{font-weight:600}
+  .opts label.sel{border-color:var(--teal);background:var(--green-bg)}
+  .opts label.sel-risk{border-color:var(--red);background:var(--red-bg)}
+  .grphead{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--teal-d);
+    font-weight:700;margin-top:16px;padding-top:12px;border-top:2px solid var(--line)}
+  .grphead:first-child{margin-top:0;padding-top:0;border-top:none}
+  .grphead.minor{color:var(--muted)} .grphead.override{color:var(--red)}
+  .qnote{width:100%;margin-top:9px;min-height:44px;border:1px dashed var(--line);border-radius:8px;
+    padding:8px 10px;font-size:12.5px;font-family:inherit;resize:vertical;background:#fbfbfc;color:var(--ink)}
+  .qnote:focus{outline:none;border-color:var(--teal);background:#fff}
+  .btn{background:var(--teal);color:#fff;border:none;padding:11px 22px;border-radius:9px;font-size:14px;
+    font-weight:600;cursor:pointer;transition:.15s}
+  .btn:hover{background:var(--teal-d)}
+  .btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .result{margin-top:18px;border-radius:12px;padding:20px;display:none}
+  .result.show{display:block}
+  .result.out{background:var(--green-bg);border:1px solid #BFDAD8}
+  .result.in{background:var(--red-bg);border:1px solid #E2BCD5}
+  .result.border{background:var(--amber-bg);border:1px solid #C2D0EC}
+  .result h3{font-size:20px;margin-bottom:6px}
+  .result .score{font-size:13px;color:var(--ink);margin-bottom:10px}
+  .result ul{margin:8px 0 0 18px;font-size:13px}
+  .result li{margin-bottom:4px}
+  .note{font-size:12px;color:var(--muted);margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+  .legend{display:flex;gap:16px;font-size:12px;margin-top:10px;justify-content:center}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .small{font-size:12px;color:var(--muted)}
+  .flag{font-size:11px;background:var(--amber-bg);color:#003182;padding:2px 8px;border-radius:6px;font-weight:600}
+  @media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.two{grid-template-columns:1fr}}
+  .seg{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .segbtn{border:1px solid var(--line);background:#fff;color:var(--muted);padding:6px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer}
+  .segbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  textarea#jdText{width:100%;min-height:240px;border:1px solid var(--line);border-radius:8px;padding:12px;font-size:13px;font-family:inherit;resize:vertical}
+  .sig{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .sig .tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;white-space:nowrap;margin-top:1px}
+  .sig .tag.in{background:var(--red-bg);color:var(--red)} .sig .tag.out{background:var(--green-bg);color:var(--green)}
+  .jdlean{padding:13px 15px;border-radius:10px;margin-bottom:14px;font-weight:700}
+  .sdsdetails{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .sdsdetails input{flex:1;min-width:160px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit}
+  #sdsOverlay{display:none;position:fixed;inset:0;background:rgba(20,20,30,.55);z-index:100;overflow:auto;padding:28px}
+  #sdsOverlay.show{display:block}
+  .sds{max-width:840px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .sds-toolbar{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;background:#f3f4f6;border-bottom:1px solid var(--line);position:sticky;top:0}
+  .sds-body{padding:34px 40px}
+  .sds-head{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--teal);padding-bottom:16px}
+  .sds-logo{font-family:'Mulish',sans-serif;font-weight:800;font-size:24px;color:var(--navy);letter-spacing:.5px}
+  .sds-logo span{color:var(--teal)}
+  .sds-kicker{margin-left:auto;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;line-height:1.3}
+  .sds h1{font-size:23px;color:var(--navy);margin:18px 0 4px}
+  .sds .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin:16px 0;font-size:13px}
+  .sds .meta div{border-bottom:1px solid #eee;padding-bottom:5px}
+  .sds .meta b{color:var(--muted);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:1px}
+  .sds-verdict{padding:16px 20px;border-radius:10px;margin:18px 0;font-size:22px;font-weight:800}
+  .sds-verdict.out{background:var(--green-bg);color:var(--teal-d)}
+  .sds-verdict.in{background:var(--red-bg);color:var(--magenta)}
+  .sds-verdict.border{background:var(--amber-bg);color:var(--navy)}
+  .sds-verdict small{display:block;font-size:12px;font-weight:500;color:var(--ink);margin-top:4px}
+  .sds h2{font-size:14.5px;color:var(--navy);margin:22px 0 6px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  .sds-q{padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:13px;overflow:hidden}
+  .sds-q .a{font-weight:600}
+  .sds-tag{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;float:right;margin-left:8px}
+  .sds-tag.pos{background:var(--green-bg);color:var(--teal-d)}
+  .sds-tag.att{background:var(--amber-bg);color:var(--navy)}
+  .sds-tag.neu{background:#eef1f5;color:var(--muted)}
+  .sds-statement{background:#f7f9fb;border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:12.5px;margin-top:8px}
+  .sds-sign{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;font-size:13px}
+  .sds-sign .line{border-top:1px solid #999;margin-top:34px;padding-top:5px;color:var(--muted);font-size:11px}
+  .sds-foot{margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+  .review-states{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .rev-pill{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:20px;display:inline-block}
+  .rev-over{background:var(--red-bg);color:var(--magenta)}
+  .rev-soon{background:var(--amber-bg);color:var(--navy)}
+  .rev-ok{background:var(--green-bg);color:var(--teal-d)}
+  .monthhead{font-size:11.5px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px;padding-top:8px}
+  @media print{
+    body > *:not(#sdsOverlay){display:none !important}
+    #sdsOverlay{position:static;background:#fff;padding:0;display:block !important}
+    #sdsOverlay .sds-toolbar{display:none !important}
+    .sds{box-shadow:none;max-width:none;border-radius:0}
+  }
+</style>
+<style>
+ header .logoimg{height:32px;width:auto;background:#fff;border-radius:7px;padding:3px 7px}
+ .libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+ .libcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+ .libcard .rt{font-weight:700;font-size:14px}
+ .libcard .meta{font-size:11.5px;color:var(--muted)}
+ .libcard .why{font-size:12.5px;color:var(--ink)}
+ .libcard .foot{margin-top:auto;display:flex;align-items:center;gap:8px;padding-top:8px}
+ .stale{font-size:10.5px;font-weight:700;color:var(--magenta);background:var(--red-bg);padding:2px 8px;border-radius:6px}
+ .fresh{font-size:10.5px;font-weight:700;color:var(--teal-d);background:var(--green-bg);padding:2px 8px;border-radius:6px}
+ .gatebox{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:9px;padding:12px 14px;font-size:12.5px;font-weight:600;margin-top:12px}
+ .barrow{margin-bottom:13px}
+ .barrow .t{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px}
+ .stack{display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+ .stack i{display:block;height:100%}
+ .btn.tiny{padding:7px 13px;font-size:12.5px}
+ .reviewcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+ .callout{background:#f7f9fb;border-left:3px solid var(--navy);padding:11px 13px;border-radius:6px;font-size:12.5px;margin:8px 0}
+ .segbtn.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="banner">⚠ DEMONSTRATION INSTANCE — live engine, illustrative ruleset (v0.2-draft) and anonymised sample workers. Not for use on real workers until IR35-adviser sign-off. Decision-support, not legal advice.</div>
+<header>
+ <img class="logoimg" src="Ascend_Logo_Colour.svg" alt="Ascend">
+ <div><h1>IR35 Workbench</h1><div class="sub">Off-payroll status, evidence &amp; reporting — contingent workforce</div></div>
+ <div class="right"><b id="hdrTenant">Tenant: Orsted</b><span id="hdrMeta">Workers in scope: 14 · ruleset v0.2-draft</span></div>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<section class="view active" id="dash">
+ <h2>Workforce compliance overview</h2>
+ <p class="lead">Live picture of off-payroll status across the contingent workforce — the single view a hirer needs to evidence reasonable care to HMRC.</p>
+ <div class="kpis" id="dashKpis"></div>
+ <div class="grid2">
+  <div class="card"><h3><span class="dot"></span>Status split (assessed workers)</h3><div id="chartSplit"></div></div>
+  <div class="card"><h3><span class="dot"></span>Outcomes by engagement type</h3><div id="chartDept"></div></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h3><span class="dot"></span>Assessments completed — rolling 6 months</h3><div id="chartTrend"></div></div>
+  <div class="card"><h3><span class="dot"></span>Compliance health</h3><div id="chartHealth"></div></div>
+ </div>
+ <div class="card"><h3><span class="dot" style="background:var(--amber)"></span>Borderline queue — awaiting expert review <span class="flag" style="margin-left:8px">action needed</span></h3><div id="dashBorder"></div></div>
+</section>
+
+<section class="view" id="assess">
+ <h2>New status assessment</h2>
+ <p class="lead">A questionnaire grouped around the <b>three key status tests</b> (substitution, control, mutuality), each with several questions, plus supporting minor tests. The key tests gate the outcome — strong minor factors don’t rescue a determination when the key tests fail.</p>
+ <div class="two">
+  <div class="card">
+   <h3><span class="dot"></span>Assignment questionnaire</h3>
+   <div class="seg"><span class="small" style="font-weight:700">Respondent:</span>
+     <button class="segbtn active" id="segClient" onclick="setResp('client')">Client / hirer</button>
+     <button class="segbtn" id="segCon" onclick="setResp('contractor')">Contractor</button>
+     <span style="flex:1"></span><span class="small" style="font-weight:700">Pre-fill example:</span>
+     <select id="prefill" onchange="prefillExample(this.value)" style="padding:6px 10px;border:1px solid var(--line);border-radius:8px"><option value="">— none —</option></select>
+   </div>
+   <div class="sdsdetails"><input id="aWorker" placeholder="Worker / PSC name"><input id="aRole" placeholder="Role / assignment"></div>
+   <div id="quiz"></div>
+   <div style="margin-top:16px;display:flex;gap:10px;align-items:center"><button class="btn" onclick="runAssess()">Run determination →</button><button class="btn sec" onclick="go('assess')">Clear</button><span class="chip" id="qprog"></span></div>
+  </div>
+  <div><div id="assessResult"><div class="card"><h3><span class="dot"></span>Result</h3><p class="small">Answer the questions and run the determination. Borderline outcomes never auto-issue an SDS — they route to the expert-review gate.</p></div></div></div>
+ </div>
+</section>
+
+<section class="view" id="jd">
+ <h2>Job description analyser</h2>
+ <p class="lead">Paste a role’s job description. The tool scans for the language that typically points a role inside or outside IR35 and gives a <b>provisional lean</b> — it never issues a determination. Every role still goes through a full per-worker assessment.</p>
+ <div class="two">
+  <div class="card"><h3><span class="dot"></span>Job description</h3>
+   <textarea id="jdText" placeholder="Paste the job description here…"></textarea>
+   <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" onclick="analyseJD()">Analyse</button>
+    <button class="btn sec" onclick="loadJD('out')">Load sample A</button>
+    <button class="btn sec" onclick="loadJD('in')">Load sample B</button>
+    <button class="btn sec" onclick="clearJD()">Clear</button>
+   </div>
+  </div>
+  <div><div class="card" id="jdResult"></div></div>
+ </div>
+</section>
+
+<section class="view" id="library">
+ <h2>Role library — pre-assessed roles</h2>
+ <p class="lead">A catalogue of roles already assessed and categorised. A match <b>pre-fills</b> a new worker’s assessment to save time and cite prior reasoning — it <b>never</b> determines status for an individual. Every worker still routes through a full per-worker assessment and, if borderline, the expert gate.</p>
+ <div class="libgrid" id="libGrid"></div>
+ <p class="note">Stale entries (assessed before the current ruleset or a relevant case-law shift) are flagged and must be re-reviewed before they pre-fill against outdated logic.</p>
+</section>
+
+<section class="view" id="register">
+ <h2>Worker register</h2>
+ <p class="lead">The full contingent workforce with current status, evidence trail and review dates. Filter and export feed straight into the reporting layer.</p>
+ <div class="toolbar">
+  <input id="search" placeholder="Search role, ref or engagement…" oninput="renderRegister()">
+  <select id="fStatus" onchange="renderRegister()"><option value="">All statuses</option><option>Outside</option><option>Inside</option><option>Borderline</option><option>Pending</option></select>
+  <span class="chip" id="regCount"></span>
+  <button class="btn sec" style="margin-left:auto;padding:8px 16px" onclick="alert('Demo: exports the filtered register to a CSV / PDF evidence pack.')">Export evidence pack</button>
+ </div>
+ <div class="card" style="padding:6px 18px 14px"><table><thead><tr><th>Ref</th><th>Worker / PSC</th><th>Role</th><th>Engagement</th><th>Day rate</th><th>Status</th><th>SDS</th><th>Insurance</th><th>Next review</th></tr></thead><tbody id="regBody"></tbody></table></div>
+</section>
+
+<section class="view" id="review">
+ <h2>Expert review queue</h2>
+ <p class="lead">Borderline determinations land here. The hard gate: a borderline case cannot become an SDS without a qualified reviewer’s signed-off decision and reasoning — enforced in the data model, not just the screen.</p>
+ <div id="reviewList"></div>
+</section>
+
+<section class="view" id="reviews">
+ <h2>SDS review calendar</h2>
+ <p class="lead">A determination is not "set and forget". This schedules a re-assessment of every SDS so the workforce stays compliant — the periodic-review element of reasonable care.</p>
+ <div class="card" style="margin-bottom:16px"><h3><span class="dot"></span>Review rule</h3><p class="small">Each determination is re-assessed <b>every 12 months</b>, or <b>immediately</b> when the role, rate or working practices materially change. A role change auto-triggers a fresh SDS and resets the clock.</p></div>
+ <div class="review-states" id="revKpis"></div>
+ <div class="card" style="padding:6px 18px 14px"><div id="revBody"></div></div>
+</section>
+
+<section class="view" id="audit">
+ <h2>Audit trail &amp; disputes</h2>
+ <p class="lead">Every determination, routing and sign-off is logged with a timestamp and owner — the evidence of "reasonable care" HMRC asks for first in an enquiry.</p>
+ <div class="grid2">
+  <div class="card"><h3><span class="dot"></span>Activity log</h3><div id="auditLog"></div></div>
+  <div class="card"><h3><span class="dot" style="background:var(--amber)"></span>Open disputes</h3><div id="disputes"></div></div>
+ </div>
+</section>
+
+</main>
+<div id="sdsOverlay"></div>
+<script>
+/* ============================== RULESET v0.2-draft ==============================
+   34 questions. Bands: override / context(unscored) / key(±2) / minor(±1).
+   opts: [text, value, tone]  tone: 'good'(outside) | '' (neutral) | 'risk'(inside)
+   WORDING + WEIGHTS illustrative — pending Bauer & Cottrell sign-off. */
+const RULESET_VERSION='v0.2-draft';
+const RULESET=[
+ // -------- CONTEXT (captured, not scored) --------
+ {id:'ctx_commenced',grp:'Engagement context',gc:'context',band:'context',
+  t:'Has the contract, including any extensions, already commenced?',
+  opts:[['Not yet commenced',0,''],['Commenced',0,'']]},
+ {id:'ctx_named',grp:'Engagement context',gc:'context',band:'context',
+  t:'Is the individual who will deliver the services personally named in the contract?',
+  opts:[['No — the PSC is the party',0,''],['Yes — the individual is named',0,'']]},
+ // -------- KEY 1: Personal service & substitution --------
+ {id:'k_personal',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'Is the contractor personally required to perform the work?',
+  h:'A genuine ability to send someone else is the strongest single pointer to outside.',
+  opts:[['No — they may provide someone else',2,'good'],['Mixed / unclear',0,''],['Yes — must be done personally',-2,'risk']]},
+ {id:'k_subright',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'Does the contract permit the contractor to subcontract, or provide a substitute for, some or all of the work?',
+  opts:[['Yes — a contractual right to substitute',2,'good'],['Silent / only with agreement',0,''],['No substitution permitted',-2,'risk']]},
+ {id:'k_subrefuse',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'If a substitute were offered, could the client refuse them for reasons beyond a lack of skills or clearance?',
+  h:'A right that the client can fetter at will is weak evidence of genuine substitution.',
+  opts:[['No — only skills / clearance',2,'good'],['Some broader grounds',0,''],['Yes — the client can refuse at will',-2,'risk']]},
+ {id:'k_subpay',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'Would the contractor be responsible for sourcing and paying for any substitute?',
+  opts:[['Yes — contractor sources and pays',2,'good'],['Shared / unclear',0,''],['No — client would arrange/pay',-2,'risk']]},
+ {id:'k_subincompetent',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'If the contractor were unsuitable, incompetent or unprofessional, would they be expected to provide an alternative individual rather than the contract simply ending?',
+  opts:[['Yes — provide an alternative',2,'good'],['Unclear',0,''],['No — the contract would end',-2,'risk']]},
+ {id:'k_subpractice',grp:'Key test 1 — Personal service & substitution',gc:'',band:'key',
+  t:'In practice, has a substitute been accepted — or would the client be likely to accept one — if the contractor could not work?',
+  h:'Substitution exercised in practice is powerful; a paper-only right is weaker.',
+  opts:[['Yes — has happened / would be accepted',2,'good'],['Untested',0,''],['No — would not be accepted',-2,'risk']]},
+ // -------- KEY 2: Control --------
+ {id:'k_managed',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Is anyone within the client’s business responsible for managing or directing the contractor’s work?',
+  opts:[['No day-to-day management',2,'good'],['Light coordination only',0,''],['Yes — actively managed',-2,'risk']]},
+ {id:'k_defines',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Does the contractor define how the work is carried out, and bear accountability for the success or failure of the deliverables?',
+  opts:[['Yes — own method, owns the outcome',2,'good'],['Partly',0,''],['No — client directs and owns it',-2,'risk']]},
+ {id:'k_hours',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Does the contractor’s time vary with the work required, or is a minimum number of working hours fixed?',
+  opts:[['Varies with the work; no minimum',2,'good'],['Some expectation',0,''],['Fixed minimum hours',-2,'risk']]},
+ {id:'k_timeoff',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Must the contractor obtain the client’s approval before taking time away from the assignment?',
+  opts:[['No approval needed',2,'good'],['Notify only',0,''],['Yes — approval required',-2,'risk']]},
+ {id:'k_refuse',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Can the contractor refuse to carry out tasks that are not specifically included in the contract?',
+  opts:[['Yes — can refuse out-of-scope tasks',2,'good'],['In practice limited',0,''],['No — must do what is assigned',-2,'risk']]},
+ {id:'k_location',grp:'Key test 2 — Control',gc:'',band:'key',
+  t:'Is most of the work carried out at the client’s premises — and if so, is that genuinely driven by security, system-access or data-sensitivity needs?',
+  h:'On-site working only points inside when it is NOT genuinely security/data-driven.',
+  opts:[['Largely off-site, or on-site only for genuine security/data reasons',2,'good'],['Mixed',0,''],['Mostly on-site by default',-2,'risk']]},
+ // -------- KEY 3: Mutuality of obligation --------
+ {id:'k_nopay',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'If there is no work available, is the client still required to pay the contractor?',
+  opts:[['No — paid only for work delivered',2,'good'],['Sometimes',0,''],['Yes — paid regardless',-2,'risk']]},
+ {id:'k_sickpay',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'Is the contractor paid when they are unable to work because of sickness or holiday?',
+  opts:[['No',2,'good'],['Partly',0,''],['Yes — paid sickness / holiday',-2,'risk']]},
+ {id:'k_project',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'Is the contract tied to a specific project or defined deliverable that ends automatically when the project completes?',
+  opts:[['Yes — project-tied, ends with it',2,'good'],['Loosely',0,''],['No — rolls onto new work',-2,'risk']]},
+ {id:'k_outside',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'Can the contractor be required to carry out work outside the named project without their specific agreement?',
+  opts:[['No — only the named project',2,'good'],['Sometimes',0,''],['Yes — can be redeployed',-2,'risk']]},
+ {id:'k_newterms',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'If additional work is offered, is it agreed by both parties under new or updated terms?',
+  opts:[['Yes — fresh agreement each time',2,'good'],['Informal',0,''],['No — just continues',-2,'risk']]},
+ {id:'k_notice',grp:'Key test 3 — Mutuality of obligation',gc:'',band:'key',
+  t:'Is there a notice period — and if so, can it be triggered by either party for any reason?',
+  h:'A zero-/short-notice, either-party right points away from mutuality.',
+  opts:[['No notice, or either-party at will',2,'good'],['Short notice',0,''],['Yes — employment-style notice',-2,'risk']]},
+ // -------- MINOR (reordered: business first, exclusivity second) --------
+ {id:'m_business',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Does the contractor operate as a business on its own account — own marketing/website, its own staff, multiple clients?',
+  opts:[['Yes — clear business on own account',1,'good'],['Some markers',0,''],['No — operates like an individual',-1,'risk']]},
+ {id:'m_otherclients',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Is the contractor free to work for other clients during the engagement — and do they actually do so?',
+  opts:[['Yes — free to, and does',1,'good'],['Free but currently exclusive',0,''],['No — effectively exclusive',-1,'risk']]},
+ {id:'m_expenses',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Does the contractor personally incur work-related expenses that are not reimbursed by the client?',
+  opts:[['Yes — unreimbursed expenses',1,'good'],['Minor',0,''],['No — all reimbursed',-1,'risk']]},
+ {id:'m_rectify',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Is the contractor responsible for correcting defective or faulty work at their own cost?',
+  opts:[['Yes — rectifies at own cost',1,'good'],['Unclear',0,''],['No',-1,'risk']]},
+ {id:'m_insurance',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Does the contractor hold business insurance, such as professional indemnity cover?',
+  opts:[['Yes',1,'good'],['Unclear',0,''],['No',-1,'risk']]},
+ {id:'m_equip',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Does the contractor use their own equipment, such as a laptop?',
+  opts:[['Mostly their own',1,'good'],['A mix',0,''],['Mostly client-provided',-1,'risk']]},
+ {id:'m_pay',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'How is the contractor paid?',
+  h:'A plain day or hourly rate is treated as NEUTRAL — common for genuine contractors. The risk signal sits in the financial-risk and MoO questions.',
+  opts:[['Fixed price / per milestone',1,'good'],['Day or hourly rate',0,''],['Salary-style, including paid downtime',-1,'risk']]},
+ {id:'m_staff',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Is the contractor treated like a member of staff — same access pass as employees, attending internal meetings/briefings unrelated to the project?',
+  opts:[['No — clearly separate',1,'good'],['Somewhat',0,''],['Yes — treated like staff',-1,'risk']]},
+ {id:'m_customers',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Is the contractor presented to the client’s customers as part of the client’s business?',
+  opts:[['No — as an external supplier',1,'good'],['Unclear',0,''],['Yes — as part of the business',-1,'risk']]},
+ {id:'m_managestaff',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Does the contractor manage any of the client’s employees?',
+  opts:[['No',1,'good'],['Informally',0,''],['Yes — line-manages staff',-1,'risk']]},
+ {id:'m_sameskills',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Are there permanent employees within the client’s business with the same skills as the contractor?',
+  opts:[['No — a distinct specialist capability',1,'good'],['Some overlap',0,''],['Yes — same as existing staff',-1,'risk']]},
+ {id:'m_interview',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Did the client interview the contractor before the engagement began, in an employee-style process?',
+  opts:[['No — business-to-business engagement',1,'good'],['Light screening',0,''],['Yes — employee-style interview',-1,'risk']]},
+ {id:'m_firstgig',grp:'Minor tests',gc:'minor',band:'minor',
+  t:'Is this the contractor’s first contracting assignment?',
+  opts:[['No — established contractor',1,'good'],['Relatively new',0,''],['Yes — first assignment',-1,'risk']]},
+ // -------- OVERRIDE --------
+ {id:'office',grp:'Statutory override',gc:'override',band:'override',
+  t:'Does the contractor hold an office-holder role with the end client, such as CEO, CTO or statutory director?',
+  h:'Office-holders are automatically inside IR35 — this overrides every other answer.',
+  opts:[['No',0,'good'],['Yes — director / office-holder',-99,'risk']]}
+];
+const KEY_MAX=36, MINOR_MAX=13;
+
+/* ============================== ENGINE ============================== */
+function assess(answers){
+ let keyScore=0,minorScore=0,office=false,strengths=[],risks=[],items=[];
+ for(const q of RULESET){
+  if(q.band==='context'){ items.push({q,val:answers[q.id]}); continue; }
+  const v=answers[q.id];
+  items.push({q,val:v});
+  if(q.band==='override'){ if(v<=-99) office=true; continue; }
+  if(q.band==='key') keyScore+=v; else minorScore+=v;
+  const label=q.t.replace(/[—].*$/,'').replace(/\?.*$/,'').trim();
+  if(v>0) strengths.push(label); else if(v<0) risks.push(label);
+ }
+ const total=keyScore+minorScore;
+ let outcome,title,msg;
+ if(office){outcome='in';title='INSIDE IR35 — office-holder override';
+  msg='The worker holds a statutory office with the client, which is automatically inside IR35. This overrides every other indicator.';}
+ else if(keyScore<=-20){outcome='in';title='Likely INSIDE IR35';
+  msg='The key tests (substitution, control, mutuality of obligation) point firmly inside. Positive minor factors do not rescue a determination when the key tests fail.';}
+ else if(keyScore>=20 && total>=20){outcome='out';title='Likely OUTSIDE IR35';
+  msg='The key tests are clearly positive and the wider picture supports it. A Status Determination Statement can be drafted for sign-off.';}
+ else{outcome='border';title='BORDERLINE — routed to expert review';
+  msg='The picture is mixed — in particular the key tests are not clearly positive. This case is automatically queued for a qualified IR35 specialist before any SDS can issue. This human gate is what protects the hirer’s reasonable-care position.';}
+ return {rulesetVersion:RULESET_VERSION,keyScore,minorScore,total,office,outcome,title,msg,strengths,risks,items,autoSDS:(outcome!=='border')};
+}
+/* ============================== HELPERS ============================== */
+function capOutcome(o){return o==='out'?'Outside':o==='in'?'Inside':o==='border'?'Borderline':'Pending';}
+function clsOf(s){return {Outside:'out',Inside:'in',Borderline:'border',Pending:'pending'}[s];}
+function sgn(n){return (n>=0?'+':'')+n;}
+function addMonths(d,m){const x=new Date(d);x.setMonth(x.getMonth()+m);return x.toISOString().slice(0,10);}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);}
+function fmtDate(d){return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function pillClass(s){return {Outside:'p-out',Inside:'p-in',Borderline:'p-border',Pending:'p-pending'}[s]||'p-pending';}
+function pill(s){return '<span class="pill '+pillClass(s)+'">'+s+'</span>';}
+function esc(t){return (t==null?'':String(t)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ============================== SEED ============================== */
+const NOW='2026-06-11';
+const TENANT={id:'orsted',name:'Orsted',sector:'Renewable energy',cadence:12};
+const PAT={
+ out:{office:0,ctx_commenced:0,ctx_named:0,k_personal:2,k_subright:2,k_subrefuse:2,k_subpay:2,k_subincompetent:2,k_subpractice:0,k_managed:2,k_defines:2,k_hours:2,k_timeoff:2,k_refuse:2,k_location:2,k_nopay:2,k_sickpay:2,k_project:2,k_outside:2,k_newterms:2,k_notice:2,m_business:1,m_otherclients:1,m_expenses:1,m_rectify:1,m_insurance:1,m_equip:1,m_pay:1,m_staff:1,m_customers:1,m_managestaff:1,m_sameskills:1,m_interview:1,m_firstgig:1},
+ in:{office:0,ctx_commenced:0,ctx_named:0,k_personal:-2,k_subright:-2,k_subrefuse:-2,k_subpay:-2,k_subincompetent:-2,k_subpractice:-2,k_managed:-2,k_defines:-2,k_hours:-2,k_timeoff:-2,k_refuse:-2,k_location:-2,k_nopay:-2,k_sickpay:-2,k_project:-2,k_outside:-2,k_newterms:-2,k_notice:-2,m_business:-1,m_otherclients:-1,m_expenses:-1,m_rectify:-1,m_insurance:-1,m_equip:-1,m_pay:-1,m_staff:-1,m_customers:-1,m_managestaff:-1,m_sameskills:-1,m_interview:-1,m_firstgig:-1},
+ border:{office:0,ctx_commenced:0,ctx_named:0,k_personal:0,k_subright:2,k_subrefuse:-2,k_subpay:0,k_subincompetent:0,k_subpractice:0,k_managed:2,k_defines:0,k_hours:0,k_timeoff:0,k_refuse:0,k_location:0,k_nopay:2,k_sickpay:2,k_project:2,k_outside:2,k_newterms:0,k_notice:0,m_business:0,m_otherclients:1,m_expenses:1,m_rectify:0,m_insurance:0,m_equip:0,m_pay:0,m_staff:0,m_customers:0,m_managestaff:0,m_sameskills:0,m_interview:0,m_firstgig:1},
+ office:{office:-99,ctx_commenced:0,ctx_named:0,k_personal:2,k_subright:2,k_subrefuse:2,k_subpay:2,k_subincompetent:2,k_subpractice:0,k_managed:2,k_defines:2,k_hours:2,k_timeoff:2,k_refuse:2,k_location:2,k_nopay:2,k_sickpay:2,k_project:2,k_outside:2,k_newterms:2,k_notice:2,m_business:1,m_otherclients:1,m_expenses:1,m_rectify:1,m_insurance:1,m_equip:1,m_pay:1,m_staff:1,m_customers:1,m_managestaff:1,m_sameskills:1,m_interview:1,m_firstgig:1}
+};
+// 4 fully-assessed representative roles (live engine) + evidence
+const SEED_FULL=[
+ {ref:'AS-2331',worker:'Worker A / Contractor PSC Ltd',role:'Geotechnical Engineer — offshore wind site investigation',engagement:'Fixed deliverable, ~14 weeks',rate:575,bucket:'Site investigation',insurance:{status:'Covered',provider:'Kingsbridge',product:'Off-Payroll Protect',tax:100000,fees:100000,payer:'End-hirer',premium:12.5},answers:PAT.out,evidence:{k_subpractice:'A qualified substitute was proposed on a prior phase and accepted by the client.',k_nopay:'Paid on delivery of the report milestone; no retainer.'},lastSDS:'2025-07-28',nextReview:'2026-07-28'},
+ {ref:'AS-2332',worker:'Worker B / Contractor PSC Ltd',role:'Project Coordinator — embedded in client construction PMO',engagement:'Rolling monthly, 11 months, full-time on site',rate:450,bucket:'PMO / controls',insurance:{status:'Pending'},answers:PAT.in,evidence:{k_managed:'Reports daily to the client PM; tasks allocated through the client PMO tooling.'},lastSDS:'2025-06-20',nextReview:'2026-06-20'},
+ {ref:'AS-2333',worker:'Worker C / Contractor PSC Ltd',role:'M&E Commissioning Engineer — property fit-out programme',engagement:'6-month assignment, mix of site and remote',rate:500,bucket:'Commissioning',insurance:{status:'Pending'},answers:PAT.border,evidence:{k_subrefuse:'Substitution clause exists but requires client approval and is untested — flagged for review.',k_location:'Core site attendance on commissioning days; balance remote. Not security-driven.'}},
+ {ref:'AS-2334',worker:'Worker D / Contractor PSC Ltd',role:'Interim Finance Director (statutory director)',engagement:'9-month interim, board-level',rate:800,bucket:'Other',insurance:{status:'Not covered'},answers:PAT.office,evidence:{office:'Registered as a statutory director at Companies House for the interim.'},lastSDS:'2026-03-11',nextReview:'2027-03-11'}
+];
+// display workforce (status assigned) — backdrop volume; SDS uses representative reasons
+const SEED_DISPLAY=[
+ ['AS-2318','Worker E / Contractor PSC Ltd','HV Cable Engineer — export cable','Defined SOW, fixed-price',690,'Outside','Install / marine / cable','Covered','2026-06-05'],
+ ['AS-2305','Worker F / Contractor PSC Ltd','Marine Coordinator — install vessels','Project, ~5 months',520,'Outside','Install / marine / cable','Covered','2026-08-12'],
+ ['AS-2279','Worker G / Contractor PSC Ltd','Package Manager — WTG','Turbine package, milestone-based',780,'Outside','PMO / controls','Covered','2026-09-03'],
+ ['AS-2270','Worker H / Contractor PSC Ltd','Commissioning Engineer — OSS','Defined commissioning scope',595,'Outside','Commissioning','Covered','2026-07-02'],
+ ['AS-2255','Worker I / Contractor PSC Ltd','Health & Safety Advisor — construction','Project advisory',505,'Outside','Other','Covered','2026-10-19'],
+ ['AS-2329','Worker J / Contractor PSC Ltd','Wind Turbine Technician — O&M campaign','Ongoing O&M, client-directed',430,'Inside','Other','Pending','2026-06-15'],
+ ['AS-2298','Worker K / Contractor PSC Ltd','QA / QC Inspector — foundations','Embedded, client-directed',470,'Inside','Site investigation','Pending','2026-05-28'],
+ ['AS-2322','Worker L / Contractor PSC Ltd','Project Controls Lead — WTG foundations','Mixed; some client direction',640,'Borderline','PMO / controls','Pending',null],
+ ['AS-2311','Worker M / Contractor PSC Ltd','SCADA Engineer — OSS commissioning','Mixed site/remote',580,'Borderline','Commissioning','Pending',null],
+ ['AS-2261','Worker N / Contractor PSC Ltd','Environmental Advisor — consents','Awaiting assessment',540,'Pending','Other','Pending',null]
+];
+// pre-assessed role library (addendum 19) — pre-fills, never determines
+const ROLE_LIBRARY=[
+ {title:'Offshore wind geotechnical engineer (fixed deliverable)',status:'Outside',pattern:'out',why:'Defined site-investigation deliverable on a fixed-price SOW, own methods/equipment, genuine substitution, no MoO once delivered.',by:'A. George',date:'2026-03-02',rs:'v0.2-draft',stale:false},
+ {title:'Embedded PMO project coordinator (ongoing)',status:'Inside',pattern:'in',why:'Full-time embedded in the client PMO, client-directed, continuous work, paid in downtime — disguised employment pattern.',by:'A. George',date:'2026-03-02',rs:'v0.2-draft',stale:false},
+ {title:'Interim director / office-holder',status:'Inside',pattern:'office',why:'Statutory office-holder of the client — automatically inside IR35 by the office-holder rule, regardless of working practices.',by:'A. George',date:'2026-03-02',rs:'v0.2-draft',stale:false},
+ {title:'HV cable engineer (fixed-price SOW)',status:'Outside',pattern:'out',why:'Engaged for a defined export-cable package on milestone payments; own equipment; project-tied with no rolling obligation.',by:'A. George',date:'2026-03-02',rs:'v0.2-draft',stale:false},
+ {title:'M&E / SCADA commissioning engineer (mixed)',status:'Mixed',pattern:'border',why:'Commissioning roles frequently sit borderline — fettered substitution and programme-driven site attendance. Expect the expert gate.',by:'A. George',date:'2026-03-02',rs:'v0.2-draft',stale:false},
+ {title:'Document controller (PMO)',status:'Inside',pattern:'in',why:'Process role fully integrated into the client team on client systems; little business-on-own-account. Assessed under the prior ruleset.',by:'A. George',date:'2025-11-14',rs:'v0.1',stale:true}
+];
+/* JD analyser model (ported from demo) */
+const JD_SIGNALS={in:[['report to','Reports into a line manager (control)'],['line manager','Line-managed like an employee (control)'],['fixed hours','Set, fixed working hours (control)'],['full-time','Full-time, ongoing commitment (mutuality)'],['ongoing','Ongoing, open-ended work (mutuality)'],['open-ended','Open-ended engagement (mutuality)'],['permanent','Permanent-style role (mutuality)'],['company equipment','Uses client-provided equipment (minor)'],['company laptop','Uses client-provided equipment (minor)'],['manage a','Manages client staff (part and parcel)'],['team meetings','Attends internal team meetings (part and parcel)'],['appraisal','Subject to performance appraisals (part and parcel)'],['holiday','Employee-type benefits referenced (minor)'],['on-site','Required to work on client site (control)'],['must work','Mandated working pattern (control)']],out:[['deliverable','Engaged for a defined deliverable (mutuality)'],['statement of work','SOW-based engagement (mutuality)'],['fixed-price','Fixed-price basis (financial risk / payment)'],['fixed price','Fixed-price basis (financial risk / payment)'],['milestone','Milestone-based payment (payment)'],['project','Defined project scope (mutuality)'],['own equipment','Uses their own equipment (minor)'],['own methods','Controls their own working methods (control)'],['substitut','Right of substitution referenced (key)'],['no obligation','No mutuality of obligation stated (key)'],['specialist','Specialist engaged for a specific need (part and parcel)'],['outside ir35','Pre-positioned as outside IR35 (verify carefully)']]};
+const JD_SAMPLES={out:"We require a specialist geotechnical consultant to deliver a defined site-investigation report against a fixed-price statement of work. The consultant will use their own equipment and own methods, may send a suitably qualified substitute, and is engaged for the duration of the project only, with no obligation on either side to provide or accept further work once the deliverable is complete.",in:"Full-time SCADA engineer to report to the Commissioning Manager, working fixed hours on-site using company equipment. The role is ongoing and open-ended, includes attendance at daily team meetings and annual appraisals, holiday entitlement, and the post-holder will manage a small team of technicians as part of the client organisation."};
+
+/* ============================== DATA STORE (multi-tenant; localStorage) ============================== */
+const DB={
+ KEY:'ir35wb3_v02',mem:null,
+ _read(){try{const r=localStorage.getItem(this.KEY);return r?JSON.parse(r):null;}catch(e){return this.mem;}},
+ _write(s){this.mem=s;try{localStorage.setItem(this.KEY,JSON.stringify(s));}catch(e){}},
+ load(){let s=this._read();if(!s){s=this.seed();this._write(s);}this.s=s;return s;},
+ reset(){try{localStorage.removeItem(this.KEY);}catch(e){}this.mem=null;this.s=this.seed();this._write(this.s);},
+ save(){this._write(this.s);},
+ nextId(p){this.s.seq=(this.s.seq||0)+1;return p+'-'+String(2400+this.s.seq);},
+ audit(entity,type,actor,text){this.s.audit.unshift({tenantId:TENANT.id,entity,type,actor,when:NOW+' '+new Date().toTimeString().slice(0,5),detail:text||''});this.save();},
+ workers(){return this.s.workers.filter(w=>w.tenantId===TENANT.id);},
+ worker(ref){return this.s.workers.find(w=>w.ref===ref&&w.tenantId===TENANT.id);},
+ sdsFor(ref){return this.s.sds.find(x=>x.workerRef===ref&&x.tenantId===TENANT.id);},
+ reviews(){return this.s.reviews.filter(r=>r.tenantId===TENANT.id);},
+ reviewFor(ref){return this.s.reviews.find(r=>r.workerRef===ref&&r.tenantId===TENANT.id);},
+ audits(){return this.s.audit.filter(a=>a.tenantId===TENANT.id);},
+ disputes(){return this.s.disputes.filter(d=>d.tenantId===TENANT.id);},
+ seed(){
+  const s={seq:0,workers:[],sds:[],reviews:[],audit:[],disputes:[]};this.s=s;let n=0;
+  const issue=(w,outcome,review,last)=>{const sref='SDS-'+w.ref.replace('AS-','');s.sds.push({tenantId:TENANT.id,ref:sref,workerRef:w.ref,outcome,issuedOn:last||NOW,issuedBy:'Ascend Workforce Solutions',status:'Issued',reviewBy:review});w.sdsState='Issued';w.lastSDS=last||NOW;w.nextReview=review;};
+  // full (live engine)
+  for(const f of SEED_FULL){
+   const d=assess(f.answers);
+   const w={tenantId:TENANT.id,ref:f.ref,worker:f.worker,role:f.role,engagement:f.engagement,rate:f.rate,bucket:f.bucket,insurance:f.insurance,answers:f.answers,evidence:f.evidence||{},outcome:d.outcome,key:d.keyScore,minor:d.minorScore,total:d.total,office:d.office,status:capOutcome(d.outcome),assessedOn:NOW,sdsState:'None',nextReview:f.nextReview||null,full:true};
+   s.workers.push(w);
+   s.audit.unshift({tenantId:TENANT.id,entity:f.ref,type:'Assessment completed',actor:'Demo seed (client respondent)',when:NOW+' 09:'+String(10+n).padStart(2,'0'),detail:'Outcome '+capOutcome(d.outcome)+' · key '+sgn(d.keyScore)+'/36 · total '+sgn(d.total)});
+   if(d.outcome==='border'){w.sdsState='Referred';s.reviews.push({tenantId:TENANT.id,workerRef:f.ref,reason:'Borderline',raisedAt:NOW+' 09:'+String(11+n).padStart(2,'0'),assignedTo:'Bauer & Cottrell (external adviser)',status:'Awaiting review',slaDue:addDays(NOW,5),rulesetVersion:RULESET_VERSION,decision:null,reasoning:''});s.audit.unshift({tenantId:TENANT.id,entity:f.ref,type:'Routed to expert review',actor:'Engine (borderline gate)',when:NOW+' 09:'+String(11+n).padStart(2,'0'),detail:'No SDS issued. Awaiting qualified sign-off. SLA due '+addDays(NOW,5)+'.'});}
+   else{issue(w,d.outcome,f.nextReview||addMonths(NOW,12),f.lastSDS);s.audit.unshift({tenantId:TENANT.id,entity:f.ref,type:'SDS issued',actor:'Ascend Workforce Solutions',when:NOW+' 09:'+String(12+n).padStart(2,'0'),detail:'SDS-'+f.ref.replace('AS-','')+' — '+capOutcome(d.outcome)+(d.office?' (office-holder override)':'')});}
+   n++;
+  }
+  // display (status given)
+  for(const r of SEED_DISPLAY){
+   const [ref,worker,role,engagement,rate,status,bucket,ins,next]=r;
+   const outcome=clsOf(status);
+   const w={tenantId:TENANT.id,ref,worker,role,engagement,rate,bucket,insurance:{status:ins},answers:null,evidence:{},outcome,status,assessedOn:NOW,sdsState:'None',nextReview:next,full:false};
+   s.workers.push(w);
+   if(status==='Borderline'){w.sdsState='Referred';s.reviews.push({tenantId:TENANT.id,workerRef:ref,reason:'Borderline',raisedAt:'2026-06-09 14:20',assignedTo:'Bauer & Cottrell (external adviser)',status:'Awaiting review',slaDue:addDays(NOW,3),rulesetVersion:RULESET_VERSION,decision:null,reasoning:''});}
+   else if(status!=='Pending'){issue(w,outcome,next||addMonths(NOW,12),next?addMonths(next,-12):null);}
+  }
+  // a few historical audit + disputes for realism
+  [['AS-2230','Status changed Inside → Outside (substitution evidenced)','IR35 reviewer','2026-06-08 11:03'],['AS-2244','SDS issued — Outside','Ascend Workforce Solutions','2026-06-08 16:12'],['AS-2210','Dispute opened by worker','Worker','2026-06-07 15:48']].forEach(e=>s.audit.push({tenantId:TENANT.id,entity:e[0],type:e[1],actor:e[2],when:e[3],detail:''}));
+  s.disputes=[{tenantId:TENANT.id,ref:'AS-2210',role:'Wind Turbine Technician',raised:'2026-06-02',status:'In review'},{tenantId:TENANT.id,ref:'AS-2185',role:'HV Cable Engineer',raised:'2026-05-28',status:'SLA breach'},{tenantId:TENANT.id,ref:'AS-2151',role:'Document Controller',raised:'2026-05-19',status:'Awaiting worker'}];
+  return s;
+ }
+};
+/* ============================== NAV / ROUTER ============================== */
+const VIEWS=[['dash','Reporting Dashboard'],['assess','New Assessment'],['jd','JD Analyser'],['library','Role Library'],['register','Worker Register'],['review','Review Queue'],['reviews','SDS Reviews'],['audit','Audit & Disputes']];
+function renderNav(){
+ const q=DB.reviews().filter(r=>r.status==='Awaiting review'||r.status==='In review').length;
+ document.getElementById('nav').innerHTML=VIEWS.map(v=>'<button data-v="'+v[0]+'" onclick="go(\''+v[0]+'\')">'+v[1]+(v[0]==='review'&&q?' <span class="flag" style="margin-left:4px">'+q+'</span>':'')+'</button>').join('');
+}
+function go(id){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===id));
+ ({dash:renderDashboard,assess:wireAssess,jd:initJD,library:renderLibrary,register:renderRegister,review:renderReview,reviews:renderReviews,audit:renderAudit}[id]||function(){})();
+ window.scrollTo(0,0);
+}
+/* charts (dependency-free SVG/CSS) */
+function donut(segs,size){size=size||150;const r=size/2-13,cx=size/2,cy=size/2,C=2*Math.PI*r;const tot=segs.reduce((a,s)=>a+s.value,0)||1;let off=0;const rings=segs.filter(s=>s.value>0).map(s=>{const len=s.value/tot*C;const el='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+s.color+'" stroke-width="22" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 '+cx+' '+cy+')"/>';off+=len;return el;}).join('');return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" style="display:block;margin:0 auto">'+rings+'<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="28" font-weight="800" fill="#231F20">'+tot+'</text><text x="'+cx+'" y="'+(cy+16)+'" text-anchor="middle" font-size="10" fill="#6b7280" font-weight="700">ASSESSED</text></svg>';}
+function trend(vals){const w=300,h=120,pad=18,bw=w/vals.length*0.6,gap=w/vals.length;const mx=Math.max.apply(null,vals)||1;const bars=vals.map((v,i)=>{const bh=(v/mx)*(h-pad*2);const x=i*gap+(gap-bw)/2;const y=h-pad-bh;return '<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="3" fill="var(--teal)"/><text x="'+(x+bw/2)+'" y="'+(h-5)+'" text-anchor="middle" font-size="9" fill="#6b7280">'+['Jan','Feb','Mar','Apr','May','Jun'][i]+'</text>';}).join('');return '<svg width="100%" viewBox="0 0 '+w+' '+h+'">'+bars+'</svg>';}
+
+/* ============================== DASHBOARD ============================== */
+function renderDashboard(){
+ const ws=DB.workers();const n=ws.length;
+ const c=o=>ws.filter(w=>w.outcome===o).length;
+ const out=c('out'),ins=c('in'),bor=c('border'),pen=c('pending');
+ const sds=ws.filter(w=>w.sdsState==='Issued').length;
+ const open=DB.reviews().filter(r=>r.status==='Awaiting review'||r.status==='In review').length;
+ const cov=ws.filter(w=>w.insurance&&w.insurance.status==='Covered').length;
+ const unc=ws.filter(w=>w.insurance&&w.insurance.status==='Not covered').length;
+ const assessed=out+ins+bor;
+ document.getElementById('dashKpis').innerHTML=
+  kpi('Workers in scope',n,'across '+TENANT.name,'')+
+  kpi('SDS issued',sds,(assessed?Math.round(sds/n*100):0)+'% coverage','up')+
+  kpi('Outside IR35',out,(n?Math.round(out/n*100):0)+'% of workers','')+
+  kpi('Borderline / review',open,'awaiting expert sign-off','dn')+
+  kpi('Insurance cover',cov+'/'+n,unc+' uncovered (risk)','');
+ const segs=[{label:'Outside',value:out,color:'#218380'},{label:'Inside',value:ins,color:'#9C2373'},{label:'Borderline',value:bor,color:'#003182'}];
+ document.getElementById('chartSplit').innerHTML=donut(segs)+'<div class="legend"><span><i style="background:#218380"></i>Outside '+out+'</span><span><i style="background:#9C2373"></i>Inside '+ins+'</span><span><i style="background:#003182"></i>Borderline '+bor+'</span><span><i style="background:#DBDBDB"></i>Pending '+pen+'</span></div>';
+ // outcomes by engagement bucket (stacked)
+ const buckets={};ws.forEach(w=>{(buckets[w.bucket]=buckets[w.bucket]||{out:0,in:0,border:0,pending:0})[w.outcome]++;});
+ document.getElementById('chartDept').innerHTML=Object.keys(buckets).map(b=>{const o=buckets[b],t=o.out+o.in+o.border+o.pending||1;const seg=(v,col)=>v?'<i style="width:'+(v/t*100)+'%;background:'+col+'"></i>':'';return '<div class="barrow"><div class="t"><span>'+b+'</span><span class="small">'+t+'</span></div><div class="stack">'+seg(o.out,'#218380')+seg(o.in,'#9C2373')+seg(o.border,'#003182')+seg(o.pending,'#DBDBDB')+'</div></div>';}).join('');
+ document.getElementById('chartTrend').innerHTML=trend([6,9,7,11,10,n])+'<p class="small" style="text-align:center">Assessments completed — illustrative trend</p>';
+ const hb=(l,p,col)=>'<div class="barrow"><div class="t"><span>'+l+'</span><b>'+p+'%</b></div><div class="bar"><span style="width:'+p+'%;background:'+(col||'var(--teal)')+'"></span></div></div>';
+ document.getElementById('chartHealth').innerHTML=
+  hb('SDS coverage',n?Math.round(sds/n*100):0,'var(--teal)')+
+  hb('Reviewed / scheduled within 12 months',n?Math.round(ws.filter(w=>w.nextReview).length/n*100):0,'var(--navy)')+
+  hb('Borderline cases routed to expert',100,'var(--green)')+
+  hb('Insurance coverage',n?Math.round(cov/n*100):0,'var(--teal)');
+ const bq=ws.filter(w=>w.outcome==='border');
+ document.getElementById('dashBorder').innerHTML='<table><thead><tr><th>Ref</th><th>Role</th><th>Engagement</th><th>Day rate</th><th>Provisional</th><th class="small">Action</th></tr></thead><tbody>'+bq.map(w=>'<tr><td><b>'+w.ref+'</b></td><td>'+esc(w.role)+'</td><td class="small">'+esc(w.engagement)+'</td><td>£'+w.rate+'</td><td>'+pill('Borderline')+'</td><td><a href="#" style="color:var(--teal);font-weight:600" onclick="go(\'review\');return false;">Open review →</a></td></tr>').join('')+'</tbody></table>';
+}
+function kpi(l,v,d,dir){return '<div class="kpi"><div class="label">'+l+'</div><div class="val">'+v+'</div><div class="delta '+(dir||'')+'">'+d+'</div></div>';}
+
+/* ============================== REGISTER ============================== */
+function renderRegister(){
+ const ws=DB.workers();const q=(document.getElementById('search').value||'').toLowerCase();const f=document.getElementById('fStatus').value;
+ const _mine=(CURRENT_USER&&CURRENT_USER.role==='linemanager'&&document.getElementById('lmMine')&&document.getElementById('lmMine').checked)?CURRENT_USER.myRefs:null;const rows=ws.filter(w=>(!f||w.status===f)&&(!q||(w.ref+w.worker+w.role+w.engagement).toLowerCase().includes(q))&&(!_mine||_mine.indexOf(w.ref)>=0));
+ document.getElementById('regBody').innerHTML=rows.map(w=>{
+  const sdsLink=w.sdsState==='Issued'?'<a href="#" style="color:var(--teal);font-weight:600" onclick="openSDS(\''+w.ref+'\');return false;">View SDS</a>':(w.sdsState==='Referred'?'<span class="pill p-border">Referred</span>':'<span class="small">—</span>');
+  const ins=w.insurance?'<span class="pill '+({Covered:'p-out','Not covered':'p-in',Pending:'p-pending'}[w.insurance.status]||'p-pending')+'">'+w.insurance.status+'</span>':'';
+  return '<tr><td><b>'+w.ref+'</b></td><td>'+esc(w.worker)+'</td><td class="small">'+esc(w.role)+'</td><td class="small">'+esc(w.engagement)+'</td><td>£'+w.rate+'</td><td>'+pill(w.status)+'</td><td class="small">'+sdsLink+'</td><td>'+ins+'</td><td class="small">'+(w.nextReview?fmtDate(w.nextReview):'—')+'</td></tr>';
+ }).join('');
+ document.getElementById('regCount').textContent=rows.length+' of '+ws.length+' workers';
+}
+
+/* ============================== ASSESSMENT ============================== */
+let RESP='client';
+function setResp(r){RESP=r;document.getElementById('segClient').classList.toggle('active',r==='client');document.getElementById('segCon').classList.toggle('active',r==='contractor');}
+function wireAssess(){
+ const sel=document.getElementById('prefill');if(sel&&sel.options.length<=1){SEED_FULL.forEach(w=>{const o=document.createElement('option');o.value=w.ref;o.textContent=w.ref+' · '+w.role.split(' — ')[0];sel.appendChild(o);});}
+ const c=document.getElementById('quiz');let last=null,h='';
+ RULESET.forEach((q,i)=>{const gc=q.band==='minor'?'minor':q.band==='override'?'override':q.band==='context'?'minor':'';if(q.grp!==last){h+='<div class="grphead '+gc+'">'+q.grp+'</div>';last=q.grp;}
+  h+='<div class="q" id="q_'+q.id+'"><div class="qt">'+(i+1)+'. '+q.t+'</div>'+(q.h?'<div class="qh">'+q.h+'</div>':'')+'<div class="opts">';
+  q.opts.forEach(o=>{h+='<label data-tone="'+o[2]+'"><input type="radio" name="'+q.id+'" value="'+o[1]+'" onchange="selOpt(this)"><span>'+o[0]+'</span></label>';});
+  h+='</div><textarea class="qnote" id="note_'+q.id+'" placeholder="Notes / evidence (optional)"></textarea></div>';});
+ c.innerHTML=h;updateProg();
+ document.getElementById('assessResult').innerHTML='<div class="card"><h3><span class="dot"></span>Result</h3><p class="small">Answer the questions and run the determination. Borderline outcomes never auto-issue an SDS — they route to the expert-review gate.</p></div>';
+}
+function selOpt(inp){inp.closest('.opts').querySelectorAll('label').forEach(l=>l.classList.remove('sel','sel-risk'));const lab=inp.closest('label');lab.classList.add(lab.dataset.tone==='risk'?'sel-risk':'sel');updateProg();}
+function updateProg(){const done=RULESET.filter(q=>document.querySelector('input[name="'+q.id+'"]:checked')).length;const e=document.getElementById('qprog');if(e)e.textContent=done+' / '+RULESET.length+' answered';}
+function prefillExample(ref){if(!ref)return;const w=SEED_FULL.find(x=>x.ref===ref);if(!w)return;document.getElementById('aWorker').value=w.worker;document.getElementById('aRole').value=w.role;applyAnswers(w.answers,w.evidence);}
+function applyAnswers(ans,ev){RULESET.forEach(q=>{const v=ans[q.id];const r=document.querySelector('input[name="'+q.id+'"][value="'+v+'"]');if(r){r.checked=true;selOpt(r);}const nt=document.getElementById('note_'+q.id);if(nt)nt.value=(ev&&ev[q.id])||'';});updateProg();}
+let lastA=null;
+function runAssess(){
+ const answers={},evidence={};
+ for(const q of RULESET){const s=document.querySelector('input[name="'+q.id+'"]:checked');if(!s){alert('Please answer every question — a complete record is part of reasonable care.');document.getElementById('q_'+q.id).scrollIntoView({behavior:'smooth',block:'center'});return;}answers[q.id]=parseInt(s.value);const nt=document.getElementById('note_'+q.id);if(nt&&nt.value.trim())evidence[q.id]=nt.value.trim();}
+ const d=assess(answers);const worker=(document.getElementById('aWorker').value||'').trim()||'[Worker / PSC]';const role=(document.getElementById('aRole').value||'').trim()||'[Role / assignment]';
+ lastA={worker,role,answers,evidence,d};
+ let h='<div class="result show '+d.outcome+'"><h3>'+d.title+'</h3><div class="score">'+(d.office?'Office-holder override — scoring not determinative':'Key '+sgn(d.keyScore)+' / 36 · Minor '+sgn(d.minorScore)+' / 13 · Combined '+sgn(d.total))+'</div>';
+ h+='<p style="font-size:13px">'+d.msg+'</p>';
+ if(!d.office&&d.strengths.length){h+='<p class="small" style="margin-top:8px"><b>Pointing outside</b></p><ul>'+d.strengths.slice(0,6).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>';}
+ if(!d.office&&d.risks.length){h+='<p class="small" style="margin-top:8px"><b>Pointing inside</b></p><ul>'+d.risks.slice(0,6).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>';}
+ if(CURRENT_USER&&CURRENT_USER.role==='contractor'){h+='<div class="gatebox" style="background:#eef1f5;border-color:#cfd6e0;color:#003182">Your responses have been recorded and submitted to the client for the determination. As the contractor, you do not issue your own SDS.</div>';}else if(d.outcome==='border'){h+='<div class="gatebox">⛔ No SDS issued. This case is gated — it routes to a qualified IR35 reviewer for sign-off before any statement can be released.</div><div style="margin-top:12px"><button class="btn" onclick="commitBorder()">Send to expert-review queue →</button></div>';}
+ else{h+='<div style="margin-top:12px"><button class="btn" onclick="commitSDS()">Generate SDS &amp; add to register →</button></div>';}
+ h+='</div>';
+ document.getElementById('assessResult').innerHTML=h;
+}
+function mkWorker(ref,a,outcome){const w={tenantId:TENANT.id,ref,worker:a.worker,role:a.role,engagement:'Entered via live assessment',rate:0,bucket:'Other',insurance:{status:'Pending'},answers:a.answers,evidence:a.evidence,outcome,key:a.d.keyScore,minor:a.d.minorScore,total:a.d.total,office:a.d.office,status:capOutcome(outcome),assessedOn:NOW,sdsState:'None',nextReview:null,full:true};DB.s.workers.push(w);return w;}
+function commitSDS(){const a=lastA,ref=DB.nextId('AS'),w=mkWorker(ref,a,a.d.outcome);const sref='SDS-'+ref.replace('AS-','');DB.s.sds.push({tenantId:TENANT.id,ref:sref,workerRef:ref,outcome:a.d.outcome,issuedOn:NOW,issuedBy:'Ascend Workforce Solutions',status:'Issued',reviewBy:addMonths(NOW,12)});w.sdsState='Issued';w.nextReview=addMonths(NOW,12);w.lastSDS=NOW;DB.audit(ref,'Assessment completed','Live demo ('+RESP+' respondent)','Outcome '+capOutcome(a.d.outcome)+' · key '+sgn(a.d.keyScore)+' · total '+sgn(a.d.total));DB.audit(ref,'SDS issued','Ascend Workforce Solutions',sref+' — '+capOutcome(a.d.outcome)+(a.d.office?' (office-holder override)':''));renderNav();openSDS(ref);}
+function commitBorder(){const a=lastA,ref=DB.nextId('AS'),w=mkWorker(ref,a,'border');w.sdsState='Referred';DB.s.reviews.push({tenantId:TENANT.id,workerRef:ref,reason:'Borderline',raisedAt:NOW+' '+new Date().toTimeString().slice(0,5),assignedTo:'Orsted Head of Tax (internal senior reviewer)',status:'Awaiting internal review',slaDue:addDays(NOW,5),rulesetVersion:RULESET_VERSION,stage:1,decision:null,reasoning:''});DB.audit(ref,'Assessment completed','Live demo ('+RESP+' respondent)','Outcome Borderline · key '+sgn(a.d.keyScore)+' · total '+sgn(a.d.total));DB.audit(ref,'Routed to expert review','Engine (borderline gate)','No SDS issued. SLA due '+addDays(NOW,5)+'.');renderNav();go('review');}
+
+/* ============================== JD ANALYSER ============================== */
+const jdEmpty='<h3><span class="dot"></span>Analysis</h3><p class="small">Paste a job description and press Analyse. The tool extracts IR35 signals and suggests a lean — it never issues a determination.</p>';
+function initJD(){if(!document.getElementById('jdResult').innerHTML.trim())document.getElementById('jdResult').innerHTML=jdEmpty;}
+function loadJD(k){document.getElementById('jdText').value=JD_SAMPLES[k];analyseJD();}
+function clearJD(){document.getElementById('jdText').value='';document.getElementById('jdResult').innerHTML=jdEmpty;}
+function analyseJD(){
+ const t=(document.getElementById('jdText').value||'').toLowerCase();const box=document.getElementById('jdResult');
+ if(!t.trim()){box.innerHTML=jdEmpty;return;}
+ const found=[];const seen=new Set();['in','out'].forEach(side=>{JD_SIGNALS[side].forEach(p=>{if(t.includes(p[0])&&!seen.has(p[1])){seen.add(p[1]);found.push([side,p[1]]);}});});
+ const ins=found.filter(f=>f[0]==='in').length,outs=found.filter(f=>f[0]==='out').length;
+ let lean,cls;if(outs>ins+1){lean='Leans OUTSIDE IR35';cls='out';}else if(ins>outs+1){lean='Leans INSIDE IR35';cls='in';}else{lean='Mixed / unclear';cls='border';}
+ let h='<h3><span class="dot"></span>Analysis</h3><div class="jdlean result '+cls+'" style="display:block">'+lean+' <span style="font-weight:400">('+outs+' outside-leaning vs '+ins+' inside-leaning signals)</span></div>';
+ h+=found.length?'<div>'+found.map(f=>'<div class="sig"><span class="tag '+f[0]+'">'+(f[0]==='in'?'INSIDE':'OUTSIDE')+'</span><span>'+f[1]+'</span></div>').join('')+'</div>':'<p class="small">No clear IR35 signals detected — assess this role individually.</p>';
+ h+='<div style="margin-top:12px"><button class="btn tiny" onclick="jdToAssessment()">Take into a full assessment →</button></div>';
+ h+='<div class="note" style="color:var(--red)"><b>Not a determination.</b> A triage aid only. Every role must still go through a full per-worker assessment — deciding status from keywords alone, without weighing the actual facts of each engagement, is exactly the behaviour HMRC says fails reasonable care.</div>';
+ box.innerHTML=h;
+}
+function jdToAssessment(){go('assess');document.getElementById('aRole').value='From JD analyser — confirm against actual engagement';}
+
+/* ============================== ROLE LIBRARY ============================== */
+function renderLibrary(){
+ document.getElementById('libGrid').innerHTML=ROLE_LIBRARY.map((e,i)=>{
+  const pc={Outside:'p-out',Inside:'p-in',Mixed:'p-border'}[e.status];
+  return '<div class="libcard"><div style="display:flex;justify-content:space-between;align-items:start;gap:8px"><span class="rt">'+esc(e.title)+'</span>'+pill(e.status==='Mixed'?'Borderline':e.status)+'</div>'+
+   '<div class="why">'+esc(e.why)+'</div>'+
+   '<div class="meta">Assessed '+fmtDate(e.date)+' by '+esc(e.by)+' · ruleset '+e.rs+'</div>'+
+   '<div class="foot">'+(e.stale?'<span class="stale">STALE — re-review</span>':'<span class="fresh">CURRENT</span>')+'<span style="flex:1"></span><button class="btn tiny" onclick="useLibrary('+i+')">Use to pre-fill →</button></div>'+
+  '</div>';
+ }).join('');
+}
+function useLibrary(i){const e=ROLE_LIBRARY[i];go('assess');document.getElementById('aRole').value=e.title+' (pre-filled from library — confirm against this worker)';applyAnswers(PAT[e.pattern],{});document.getElementById('assessResult').innerHTML='<div class="card"><h3><span class="dot"></span>Pre-filled from role library</h3><p class="small">Starting point: <b>'+esc(e.title)+'</b> — provisionally '+esc(e.status)+'. '+esc(e.why)+'<br><br><b>This has not determined anything.</b> Confirm or correct each answer against this worker’s actual engagement, then run the determination.</p></div>';}
+
+/* ============================== REVIEW QUEUE ============================== */
+function renderReview(){
+ const items=DB.reviews();const open=items.filter(r=>r.status==='Awaiting review'||r.status==='In review');const done=items.filter(r=>r.status==='Signed off'||r.status==='Returned for info');
+ let h='';if(!open.length)h+='<div class="card"><p class="small">No items awaiting review.</p></div>';
+ open.forEach(r=>{const w=DB.worker(r.workerRef);h+='<div class="reviewcard"><h3 style="display:flex;align-items:center;gap:8px;font-size:14px"><span class="dot"></span>'+r.workerRef+' — '+esc(w?w.role:'')+' '+pill('Borderline')+'</h3>'+
+   '<div class="small" style="margin:6px 0">Raised '+r.raisedAt+' · assigned to <b>'+esc(r.assignedTo)+'</b> · SLA due <b>'+r.slaDue+'</b> · ruleset '+r.rulesetVersion+'</div>'+
+   '<div class="callout"><b>Engine lean:</b> Borderline'+(w&&w.full?' — key '+sgn(w.key)+' / 36, total '+sgn(w.total)+'. The key tests are not clearly positive, so the engine declined to determine.':' — mixed indicators across the key tests.')+'</div>'+
+   evidenceList(w)+
+   '<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px"><div class="small" style="font-weight:700;margin-bottom:6px">Reviewer decision (qualified IR35 specialist)</div>'+
+   '<select id="dec_'+r.workerRef+'" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px"><option value="">Select decision…</option><option>Outside</option><option>Inside</option><option>Needs more info</option></select>'+
+   '<textarea id="rea_'+r.workerRef+'" class="qnote" placeholder="Reviewer reasoning (mandatory) — recorded to the audit trail and referenced on the SDS." style="display:block;min-height:60px"></textarea>'+
+   '<div style="margin-top:10px"><button class="btn" onclick="signOff(\''+r.workerRef+'\')">Record decision &amp; release outcome →</button></div></div></div>';});
+ if(done.length){h+='<div class="card"><h3><span class="dot"></span>Closed reviews</h3><table><thead><tr><th>Worker</th><th>Decision</th><th>Reviewer</th><th>Signed off</th></tr></thead><tbody>'+done.map(r=>'<tr><td><b>'+r.workerRef+'</b></td><td>'+(r.decision?pill(r.decision):r.status)+'</td><td class="small">'+esc(r.signedOffBy||r.assignedTo)+'</td><td class="small">'+(r.signedOffAt||'—')+'</td></tr>').join('')+'</tbody></table></div>';}
+ document.getElementById('reviewList').innerHTML=h;
+}
+function evidenceList(w){if(!w||!w.evidence||!Object.keys(w.evidence).length)return '';return '<div class="small" style="margin-top:8px"><b>Evidence notes attached</b>'+Object.keys(w.evidence).map(id=>{const q=RULESET.find(x=>x.id===id);return '<div>• <b>'+esc(q?q.t.replace(/[—].*$/,'').trim():id)+':</b> '+esc(w.evidence[id])+'</div>';}).join('')+'</div>';}
+function signOff(ref){const dec=document.getElementById('dec_'+ref).value;const rea=(document.getElementById('rea_'+ref).value||'').trim();if(!dec){alert('Select a decision.');return;}if(!rea){alert('Reviewer reasoning is mandatory — a bare verdict is weak reasonable-care evidence.');return;}const r=DB.reviewFor(ref),w=DB.worker(ref);r.reasoning=rea;r.signedOffBy='Bauer & Cottrell (external adviser)';r.signedOffAt=NOW+' '+new Date().toTimeString().slice(0,5);
+ if(dec==='Needs more info'){r.status='Returned for info';DB.audit(ref,'Returned for more information','Bauer & Cottrell',rea);renderNav();go('review');return;}
+ r.status='Signed off';r.decision=dec;const outcome=dec==='Outside'?'out':'in';w.outcome=outcome;w.status=dec;w.sdsState='Issued';w.nextReview=addMonths(NOW,12);w.lastSDS=NOW;
+ const sref='SDS-'+ref.replace('AS-','');DB.s.sds.push({tenantId:TENANT.id,ref:sref,workerRef:ref,outcome,issuedOn:NOW,issuedBy:'Ascend Workforce Solutions',status:'Issued',reviewBy:addMonths(NOW,12),reviewer:'Bauer & Cottrell',reviewerReasoning:rea});
+ DB.audit(ref,'Expert review signed off','Bauer & Cottrell (external adviser)','Decision: '+dec+'. '+rea);DB.audit(ref,'SDS issued','Ascend Workforce Solutions',sref+' — '+dec+' (released after expert sign-off)');renderNav();openSDS(ref);}
+
+/* ============================== SDS REVIEW CALENDAR ============================== */
+function renderReviews(){
+ const rows=DB.workers().filter(w=>w.sdsState==='Issued'&&w.nextReview).map(w=>{const days=Math.round((new Date(w.nextReview)-new Date(NOW))/86400000);return {ref:w.ref,role:w.role,status:w.status,last:w.lastSDS,next:w.nextReview,days};}).sort((a,b)=>new Date(a.next)-new Date(b.next));
+ const over=rows.filter(r=>r.days<0).length,soon=rows.filter(r=>r.days>=0&&r.days<=30).length,sched=rows.filter(r=>r.days>30).length;
+ document.getElementById('revKpis').innerHTML='<span class="rev-pill rev-over">'+over+' overdue</span><span class="rev-pill rev-soon">'+soon+' due within 30 days</span><span class="rev-pill rev-ok">'+sched+' scheduled</span>';
+ let h='<table><thead><tr><th>Ref</th><th>Role</th><th>Status</th><th>Last SDS</th><th>Next review</th><th>State</th></tr></thead><tbody>';let lm=null;
+ rows.forEach(r=>{const m=new Date(r.next).toLocaleDateString('en-GB',{month:'long',year:'numeric'});if(m!==lm){h+='<tr><td colspan="6" class="monthhead">'+m+'</td></tr>';lm=m;}const st=r.days<0?'<span class="rev-pill rev-over">Overdue</span>':r.days<=30?'<span class="rev-pill rev-soon">Due ≤30 days</span>':'<span class="rev-pill rev-ok">Scheduled</span>';h+='<tr><td><b>'+r.ref+'</b></td><td>'+esc(r.role)+'</td><td>'+pill(r.status)+'</td><td class="small">'+(r.last?fmtDate(r.last):'—')+'</td><td class="small">'+fmtDate(r.next)+'</td><td>'+st+'</td></tr>';});
+ h+='</tbody></table><p class="small" style="margin-top:12px;color:var(--magenta)"><b>Role-change trigger:</b> when a worker’s role, rate or working practices change, the system auto-flags an immediate re-assessment and resets the 12-month clock.</p>';
+ document.getElementById('revBody').innerHTML=h;
+}
+
+/* ============================== AUDIT & DISPUTES ============================== */
+function renderAudit(){
+ document.getElementById('auditLog').innerHTML='<table><thead><tr><th>When</th><th>Ref</th><th>Event</th><th>By</th></tr></thead><tbody>'+DB.audits().slice(0,18).map(e=>'<tr><td class="small" style="white-space:nowrap">'+e.when+'</td><td><b>'+e.entity+'</b></td><td class="small">'+esc(e.type)+(e.detail?' <span class="small">— '+esc(e.detail)+'</span>':'')+'</td><td class="small">'+esc(e.actor)+'</td></tr>').join('')+'</tbody></table>';
+ document.getElementById('disputes').innerHTML='<table><thead><tr><th>Ref</th><th>Role</th><th>Raised</th><th>Status</th></tr></thead><tbody>'+DB.disputes().map(d=>{const pc={'In review':'p-border','SLA breach':'p-in','Awaiting worker':'p-pending'}[d.status]||'p-pending';return '<tr><td><b>'+d.ref+'</b></td><td>'+esc(d.role)+'</td><td class="small">'+fmtDate(d.raised)+'</td><td><span class="pill '+pc+'">'+d.status+'</span></td></tr>';}).join('')+'</tbody></table>';
+}
+
+/* ============================== SDS MODAL ============================== */
+function openSDS(ref){if(CURRENT_USER&&CURRENT_USER.role==='contractor'&&ref!==CURRENT_USER.workerRef){alert('You can only view your own SDS.');return;}
+ const w=DB.worker(ref),sds=DB.sdsFor(ref);if(!w||!sds){alert('SDS not found.');return;}
+ const review=DB.reviewFor(ref);const vm={out:['out','OUTSIDE IR35'],in:['in','INSIDE IR35']}[w.outcome]||['border','BORDERLINE'];
+ let reasons='';
+ if(w.full&&w.answers){const d=assess(w.answers);const groups={};d.items.forEach(it=>{if(it.q.band==='context')return;(groups[it.q.grp]=groups[it.q.grp]||[]).push(it);});
+  Object.keys(groups).forEach(g=>{reasons+='<h2>'+g+'</h2>'+groups[g].map(it=>{const v=it.val;const tag=it.q.band==='override'?(v<=-99?'<span class="sds-tag att">INSIDE (STATUTORY)</span>':''):(v>0?'<span class="sds-tag pos">SUPPORTS OUTSIDE</span>':v<0?'<span class="sds-tag att">ATTENTION</span>':'<span class="sds-tag neu">NEUTRAL</span>');const opt=it.q.opts.find(o=>o[1]===v);return '<div class="sds-q">'+tag+esc(it.q.t.replace(/[—].*$/,'').trim())+': <span class="a">'+esc(opt?opt[0]:'')+'</span></div>';}).join('');});}
+ else{const canned={out:[['SUPPORTS OUTSIDE','Genuine right of substitution the client cannot unreasonably refuse.'],['SUPPORTS OUTSIDE','Worker controls their own methods, hours and location.'],['SUPPORTS OUTSIDE','No mutuality — engaged for a defined deliverable.'],['SUPPORTS OUTSIDE','Carries financial risk; own equipment; works for other clients.']],in:[['ATTENTION','Work must be carried out personally; no genuine substitution.'],['ATTENTION','Client directs how, when and where the work is done.'],['ATTENTION','Ongoing mutuality of obligation; paid in downtime.'],['ATTENTION','Integrated into the client organisation.']]}[w.outcome]||[['NEUTRAL','Mixed indicators across the key tests; referred for review.']];
+  reasons='<h2>Summary of reasons</h2>'+canned.map(c=>'<div class="sds-q"><span class="sds-tag '+(c[0]==='SUPPORTS OUTSIDE'?'pos':c[0]==='ATTENTION'?'att':'neu')+'">'+c[0]+'</span>'+esc(c[1])+'</div>').join('');}
+ let ev='';const evk=Object.keys(w.evidence||{});if(evk.length){ev='<h2>Evidence recorded</h2>'+evk.map(id=>{const q=RULESET.find(x=>x.id===id);return '<div class="sds-q"><b>'+esc(q?q.t.replace(/[—].*$/,'').trim():id)+':</b> '+esc(w.evidence[id])+'</div>';}).join('');}
+ const ins=w.insurance&&w.insurance.status==='Covered'?'<h2>Insurance position</h2><div class="sds-statement">Cover in place — <b>'+esc(w.insurance.provider)+' '+esc(w.insurance.product)+'</b>. Up to £'+(w.insurance.tax/1000)+'k tax liability + £'+(w.insurance.fees/1000)+'k legal/professional fees. Premium £'+w.insurance.premium+' / worker / month, paid by '+esc(w.insurance.payer)+'. Insurance transfers the financial consequence of a challenged determination; it does not transfer the legal duty to determine, which remains with the end-hirer.</div>':'<h2>Insurance position</h2><div class="sds-statement">No cover currently recorded for this worker.</div>';
+ const html='<div class="sds"><div class="sds-toolbar"><button class="btn sec" onclick="closeSDS()">Close</button><button class="btn" onclick="window.print()">Print / Save PDF</button></div><div class="sds-body">'+
+  '<div class="sds-head"><div class="sds-logo">ascend<span>.</span></div><div class="sds-kicker">Status Determination Statement<br>'+sds.ref+'</div></div>'+
+  '<h1>Status Determination Statement</h1><p class="small">Issued under the off-payroll working rules (Chapter 10, Part 2 ITEPA 2003).</p>'+
+  '<div class="meta"><div><b>Worker / PSC</b>'+esc(w.worker)+'</div><div><b>Role / assignment</b>'+esc(w.role)+'</div><div><b>End-hirer (client)</b>'+esc(TENANT.name)+'</div><div><b>SDS reference</b>'+sds.ref+'</div><div><b>Determination date</b>'+fmtDate(sds.issuedOn)+'</div><div><b>Ruleset</b>'+RULESET_VERSION+' (illustrative)</div></div>'+
+  '<div class="sds-verdict '+vm[0]+'">'+vm[1]+(w.full&&!w.office?'<small>Key '+sgn(w.key)+' / 36 · combined '+sgn(w.total)+'</small>':w.office?'<small>Office-holder override</small>':'')+'</div>'+roleSummaryBlock(w)+
+  (review&&review.reviewerReasoning?'<div class="sds-statement"><b>Expert review (qualified IR35 specialist):</b> '+esc(review.reviewerReasoning)+' — '+esc(review.signedOffBy)+', '+esc(review.signedOffAt)+'</div>':'')+
+  reasons+ev+
+  '<h2>Statement of reasonable care</h2><div class="sds-statement">This determination applied and recorded the established status principles against this worker’s actual engagement. Each answer carries a rationale where provided; borderline cases are referred to a qualified specialist before any statement issues; and this determination will be reviewed within 12 months or on any material change to role, rate or working practices.</div>'+
+  ins+
+  '<h2>Review</h2><p class="small">Review by <b>'+fmtDate(sds.reviewBy)+'</b> (12 months), or sooner on material change.</p>'+
+  '<h2>If the worker disagrees</h2><p class="small">The worker or fee-payer may make representations. The end-hirer will consider them and respond within <b>45 days</b>.</p>'+
+  '<div class="sds-sign"><div><b style="font-size:10.5px;color:var(--muted)">DETERMINED BY</b><div class="line">Ascend Workforce Solutions</div></div><div><b style="font-size:10.5px;color:var(--muted)">DATE</b><div class="line">'+fmtDate(sds.issuedOn)+'</div></div></div>'+
+  '<div class="sds-foot">Illustrative output of the IR35 Workbench (ruleset '+RULESET_VERSION+', pending IR35-adviser sign-off). Decision-support, not legal advice. The end-hirer remains legally responsible for the determination. Ascend Workforce Solutions.</div>'+
+  '</div></div>';
+ const ov=document.getElementById('sdsOverlay');ov.innerHTML=html;ov.classList.add('show');
+}
+function closeSDS(){const ov=document.getElementById('sdsOverlay');ov.classList.remove('show');ov.innerHTML='';}
+
+/* ============================== INIT ============================== */
+DB.load();
+
+/* ============================== AUTH / RBAC + TWO-STAGE REVIEW (demonstration access) ============================== */
+const ROLE_TABS={
+ platform:['dash','assess','jd','library','register','review','reviews','audit'],
+ clientadmin:['dash','assess','jd','library','register','review','reviews','audit'],
+ linemanager:['dash','assess','jd','library','register','reviews','audit'],
+ internalreviewer:['review','register','audit'],
+ reviewer:['review','audit'],
+ contractor:['mine','assess']
+};
+const NAVLABEL={dash:'Reporting Dashboard',assess:'New Assessment',jd:'JD Analyser',library:'Role Library',register:'Worker Register',review:'Review Queue',reviews:'SDS Reviews',audit:'Audit & Disputes',mine:'My IR35 status'};
+const USERS={
+ platform:{role:'platform',name:'Aaron George',title:'Ascend Platform Admin',tenant:'All tenants'},
+ clientadmin:{role:'clientadmin',name:'Orsted IR35 Administrator',title:'Client Administrator',tenant:'Orsted'},
+ linemanager:{role:'linemanager',name:'Site Investigation Lead',title:'Line Manager',tenant:'Orsted',myRefs:['AS-2331','AS-2298']},
+ internalreviewer:{role:'internalreviewer',name:'Orsted Head of Tax',title:'Internal Senior Reviewer',tenant:'Orsted'},
+ reviewer:{role:'reviewer',name:'Bauer & Cottrell',title:'Expert Reviewer (external)',tenant:'Orsted'},
+ contractor:{role:'contractor',name:'Worker A / Contractor PSC Ltd',title:'Contractor',tenant:'Orsted',workerRef:'AS-2331'}
+};
+function tabsFor(role){return ROLE_TABS[role]||[];}
+function canSignOff(role){return role==='reviewer'||role==='internalreviewer'||role==='platform';}
+function canActStage(role,stage){if(role==='platform')return true;if(stage===1)return role==='internalreviewer';if(stage===2)return role==='reviewer';return false;}
+function defaultTab(role){return {platform:'dash',clientadmin:'dash',linemanager:'dash',internalreviewer:'review',reviewer:'review',contractor:'mine'}[role]||'dash';}
+function navLabel(id){if(CURRENT_USER&&CURRENT_USER.role==='contractor'){if(id==='mine')return 'My IR35 status';if(id==='assess')return 'My questionnaire';}return NAVLABEL[id]||id;}
+let CURRENT_USER=null;
+
+/* role summary on the SDS (5-10 lines) */
+const SUMM={
+ 'AS-2331':'Specialist geotechnical engineer engaged through a personal service company to deliver a defined offshore-wind site-investigation report. Works to a fixed-price statement of work over roughly 14 weeks, using own methods and equipment, largely off-site. A genuine right of substitution exists and has been exercised on a prior phase. There is no obligation on either side once the deliverable is complete, and the contractor carries the commercial risk of overruns.',
+ 'AS-2332':'Project coordinator embedded full-time within the client’s construction PMO on a rolling monthly basis, ongoing for eleven months. Work is directed day-to-day by the client’s project manager, performed on client systems to set hours on the client site, with continuous work expected and pay continuing during quiet periods. No substitution is permitted and the role is integrated into the client team.',
+ 'AS-2333':'M&E commissioning engineer on a six-month property fit-out programme, splitting time between site and remote working. The contractor decides technical method but works to the client’s overall commissioning programme, with core site attendance on commissioning days. A substitution clause exists but requires client approval and is untested. Mutuality is weak. The indicators are finely balanced across the key tests, so the case is referred for review rather than auto-determined.',
+ 'AS-2334':'Interim Finance Director engaged for a nine-month, board-level assignment. The individual is appointed as a statutory director of the client and registered at Companies House for the duration. As a statutory office-holder, the engagement falls automatically inside IR35 under the office-holder rule, irrespective of the wider working practices.'
+};
+function roleSummaryBlock(w){
+ var s=SUMM[w.ref]||('Engagement of '+(w.worker||'the worker')+' as '+(w.role||'a contractor')+(w.engagement?' — '+w.engagement+'.':'.')+' Assessed against this worker’s actual working practices under the established status tests; see the reasons below.');
+ return '<h2>Role summary</h2><div class="sds-statement">'+esc(s)+'</div>';
+}
+
+function buildLoginUI(){
+ const st=document.createElement('style');
+ st.textContent='#loginScreen{position:fixed;inset:0;z-index:300;background:linear-gradient(135deg,#0C365F,#001E5A);display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}'+
+  '.loginbox{background:#fff;border-radius:16px;max-width:540px;width:100%;padding:32px;box-shadow:0 30px 80px rgba(0,0,0,.4)}'+
+  '.loginbox img{height:36px;margin-bottom:6px}.loginbox h2{font-size:19px;margin:8px 0 2px}.loginbox .sub{color:var(--muted);font-size:13px;margin-bottom:16px}'+
+  '.loginbox .field{margin-bottom:10px}.loginbox label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}'+
+  '.loginbox input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit}'+
+  '.rolelist{display:flex;flex-direction:column;gap:7px;margin-top:6px}'+
+  '.rolebtn{display:flex;align-items:center;gap:12px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 13px;cursor:pointer;font-family:inherit}'+
+  '.rolebtn:hover{border-color:var(--teal);background:var(--green-bg)}.rolebtn .rn{font-weight:700;font-size:13px}.rolebtn .rd{font-size:11px;color:var(--muted)}'+
+  '.rolebtn .ric{width:32px;height:32px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px}'+
+  '.logindis{font-size:11px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:11px}'+
+  'header .right .logout{margin-top:6px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:7px;padding:4px 12px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}';
+ document.head.appendChild(st);
+ const roles=[['platform','Ascend Platform Admin','Cross-tenant owner — every tenant, ruleset and config','#003182'],
+  ['clientadmin','Client Administrator','Full access within Orsted — assess, issue SDS, manage users','#218380'],
+  ['linemanager','Line Manager','Assess and view all Orsted workers; filter to their own','#176561'],
+  ['internalreviewer','Internal Senior Reviewer','Senior Orsted stakeholder — approves or escalates borderline (Stage 1)','#0C365F'],
+  ['reviewer','Expert Reviewer (Bauer & Cottrell)','External legal/tax expert — final borderline sign-off (Stage 2)','#9C2373'],
+  ['contractor','Contractor','Gated — own questionnaire and own SDS only','#6b7280']];
+ const ov=document.createElement('div');ov.id='loginScreen';
+ ov.innerHTML='<div class="loginbox"><img src="Ascend_Logo_Colour.svg" alt="Ascend"><h2>IR35 Workbench</h2><div class="sub">Off-payroll status, evidence &amp; reporting — sign in to continue</div>'+
+  '<div class="field"><label>Email</label><input id="loginEmail" placeholder="name@orsted.com" value="demo@orsted.com"></div>'+
+  '<div class="field"><label>Password</label><input id="loginPw" type="password" value="demo"></div>'+
+  '<label style="font-size:12px;font-weight:700;color:var(--muted)">Sign in as (demonstration roles)</label>'+
+  '<div class="rolelist">'+roles.map(r=>'<button class="rolebtn" onclick="loginAs(\''+r[0]+'\')"><span class="ric" style="background:'+r[3]+'">'+r[1][0]+'</span><span><span class="rn">'+r[1]+'</span><br><span class="rd">'+r[2]+'</span></span></button>').join('')+'</div>'+
+  '<div class="logindis">⚠ Demonstration access only — front-end role-gating to illustrate the permission model. Production authentication (SSO / per-user accounts) arrives with the hosted, server-backed version.</div></div>';
+ document.body.appendChild(ov);
+ const main=document.querySelector('main');const sec=document.createElement('section');sec.className='view';sec.id='mine';main.appendChild(sec);
+ migrateReviews();
+}
+function loginAs(key){CURRENT_USER=USERS[key];document.getElementById('loginScreen').style.display='none';renderNav();go(defaultTab(CURRENT_USER.role));}
+function logout(){CURRENT_USER=null;const ls=document.getElementById('loginScreen');if(ls)ls.style.display='flex';}
+function updateHeader(){if(!CURRENT_USER)return;const r=document.querySelector('header .right');if(!r)return;r.innerHTML='<b>'+esc(CURRENT_USER.title)+' — '+esc(CURRENT_USER.name)+'</b><span>Tenant: '+esc(CURRENT_USER.tenant)+' · ruleset '+RULESET_VERSION+'</span><button class="logout" onclick="logout()">Log out</button>';}
+
+function renderNav(){
+ if(!CURRENT_USER){return;}
+ const tabs=tabsFor(CURRENT_USER.role);
+ const q=DB.reviews().filter(r=>r.status&&r.status.indexOf('Awaiting')===0||r.status==='Escalated — awaiting external').length;
+ document.getElementById('nav').innerHTML=tabs.map(id=>'<button data-v="'+id+'" onclick="go(\''+id+'\')">'+navLabel(id)+(id==='review'&&q?' <span class="flag" style="margin-left:4px">'+q+'</span>':'')+'</button>').join('');
+ updateHeader();
+}
+function go(id){
+ if(!CURRENT_USER){return;}
+ const tabs=tabsFor(CURRENT_USER.role);
+ if(tabs.indexOf(id)<0)id=defaultTab(CURRENT_USER.role);
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ const sec=document.getElementById(id);if(sec)sec.classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===id));
+ if(id==='assess'){wireAssess();var _lock=CURRENT_USER.role==='contractor'?'contractor':(CURRENT_USER.role==='linemanager'?'client':null);applyRespLock(_lock);if(CURRENT_USER.role==='contractor'){const aw=document.getElementById('aWorker');if(aw){aw.value=CURRENT_USER.name;aw.readOnly=true;}const w=DB.worker(CURRENT_USER.workerRef);const ar=document.getElementById('aRole');if(ar&&w){ar.value=w.role;ar.readOnly=true;}}}
+ else if(id==='register'){renderRegister();if(CURRENT_USER.role==='linemanager')injectLMFilter();}
+ else {({dash:renderDashboard,jd:initJD,library:renderLibrary,review:renderReview,reviews:renderReviews,audit:renderAudit,mine:renderMine}[id]||function(){})();}
+ window.scrollTo(0,0);
+}
+function injectLMFilter(){const tb=document.querySelector('#register .toolbar');if(!tb||document.getElementById('lmMine'))return;const lbl=document.createElement('label');lbl.style.cssText='display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--navy)';lbl.innerHTML='<input type="checkbox" id="lmMine" onchange="renderRegister()"> My workers only';tb.insertBefore(lbl,document.getElementById('regCount'));}
+function renderMine(){
+ const u=CURRENT_USER,w=DB.worker(u.workerRef),sds=DB.sdsFor(u.workerRef),rev=DB.reviewFor(u.workerRef);
+ let h='<div class="card"><h3><span class="dot"></span>Your engagement</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:13px"><div><b style="color:var(--muted);font-size:10.5px;text-transform:uppercase;display:block">Worker / PSC</b>'+esc(w.worker)+'</div><div><b style="color:var(--muted);font-size:10.5px;text-transform:uppercase;display:block">Role</b>'+esc(w.role)+'</div><div><b style="color:var(--muted);font-size:10.5px;text-transform:uppercase;display:block">End-hirer</b>'+esc(TENANT.name)+'</div><div><b style="color:var(--muted);font-size:10.5px;text-transform:uppercase;display:block">Engagement</b>'+esc(w.engagement)+'</div></div></div>';
+ h+='<div class="card" style="margin-top:14px"><h3><span class="dot"></span>Your IR35 determination</h3>';
+ if(sds){h+='<p style="font-size:14px">Your status determination is '+pill(w.status)+'.</p><div style="margin-top:10px"><button class="btn" onclick="openSDS(\''+u.workerRef+'\')">View my Status Determination Statement →</button></div><p class="note">If you disagree, you may make representations to the end-hirer, who will respond within 45 days.</p>';}
+ else if(rev){h+='<p class="small">Your assessment is <b>with a qualified reviewer</b> (borderline) — no determination has been issued yet.</p>';}
+ else{h+='<p class="small">No determination issued yet.</p>';}
+ h+='</div><div class="card" style="margin-top:14px"><h3><span class="dot"></span>Your questionnaire</h3><p class="small">Complete or update your side of the status questionnaire. Your answers are submitted to the client for the determination — you do not issue your own SDS.</p><div style="margin-top:10px"><button class="btn sec" onclick="go(\'assess\')">Open my questionnaire →</button></div></div>';
+ document.getElementById('mine').innerHTML=h;
+}
+
+/* ---------- two-stage review (overrides chunk-5 versions) ---------- */
+function stageLabel(st){return st===2?'Stage 2 — external expert':'Stage 1 — internal senior reviewer';}
+function isOpen(r){return r.status&&(r.status.indexOf('Awaiting')===0||r.status.indexOf('Escalated')===0||r.status==='In review');}
+function renderReview(){
+ const items=DB.reviews();const open=items.filter(isOpen);const done=items.filter(r=>!isOpen(r));
+ const role=CURRENT_USER?CURRENT_USER.role:'';
+ let h='<div class="callout" style="margin-bottom:14px"><b>Two-stage gate.</b> A borderline case goes first to an <b>internal senior reviewer</b> (Stage 1), who can approve and release the SDS or escalate to the <b>external legal/tax expert</b> (Stage 2). No borderline case becomes an SDS without a signed-off decision and reasoning at one of these stages — enforced in the data model.</div>';
+ if(!open.length)h+='<div class="card"><p class="small">No items awaiting review.</p></div>';
+ open.forEach(r=>{const w=DB.worker(r.workerRef);const canAct=canActStage(role,r.stage||1);
+  h+='<div class="reviewcard"><h3 style="display:flex;align-items:center;gap:8px;font-size:14px"><span class="dot"></span>'+r.workerRef+' — '+esc(w?w.role:'')+' '+pill('Borderline')+' <span class="rev-pill '+(r.stage===2?'rev-soon':'rev-over')+'">'+stageLabel(r.stage||1)+'</span></h3>'+
+   '<div class="small" style="margin:6px 0">Raised '+r.raisedAt+' · now with <b>'+esc(r.assignedTo)+'</b> · SLA due <b>'+r.slaDue+'</b> · ruleset '+r.rulesetVersion+'</div>'+
+   '<div class="callout"><b>Engine lean:</b> Borderline'+(w&&w.full?' — key '+sgn(w.key)+' / 36, total '+sgn(w.total)+'. The key tests are not clearly positive, so the engine declined to determine.':' — mixed indicators across the key tests.')+'</div>'+
+   evidenceList(w);
+  if(r.stage===2&&r.stage1Reason){h+='<div class="callout" style="border-left-color:var(--teal)"><b>Stage 1 (internal) — escalated by '+esc(r.stage1By||'internal reviewer')+':</b> '+esc(r.stage1Reason)+'</div>';}
+  if(canAct){
+   h+='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px"><div class="small" style="font-weight:700;margin-bottom:6px">'+(r.stage===2?'External expert decision (Bauer & Cottrell)':'Internal senior reviewer decision')+'</div>'+
+    '<select id="dec_'+r.workerRef+'" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px"><option value="">Select decision…</option><option>Outside</option><option>Inside</option><option>Needs more info</option></select>'+
+    '<textarea id="rea_'+r.workerRef+'" class="qnote" placeholder="Reasoning (mandatory) — recorded to the audit trail and referenced on the SDS." style="display:block;min-height:60px"></textarea>'+
+    '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="signOff(\''+r.workerRef+'\')">Approve &amp; release SDS →</button>'+
+    ((r.stage||1)===1?'<button class="btn sec" onclick="escalate(\''+r.workerRef+'\')">Escalate to external expert →</button>':'')+'</div></div>';
+  } else {
+   h+='<div class="callout" style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px">Awaiting <b>'+(r.stage===2?'the external expert (Bauer & Cottrell)':'the internal senior reviewer')+'</b>. '+(canSignOff(role)?'You do not have authority over this stage.':'Only a designated reviewer can sign off a borderline determination.')+'</div>';
+  }
+  h+='</div>';});
+ if(done.length){h+='<div class="card"><h3><span class="dot"></span>Closed reviews</h3><table><thead><tr><th>Worker</th><th>Decision</th><th>Resolved at</th><th>By</th></tr></thead><tbody>'+done.map(r=>'<tr><td><b>'+r.workerRef+'</b></td><td>'+(r.decision?pill(r.decision):esc(r.status))+'</td><td class="small">'+esc(r.signedOffAt||'—')+'</td><td class="small">'+esc(r.signedOffBy||r.assignedTo)+'</td></tr>').join('')+'</tbody></table></div>';}
+ document.getElementById('reviewList').innerHTML=h;
+}
+function escalate(ref){
+ const r=DB.reviewFor(ref);if(!canActStage(CURRENT_USER&&CURRENT_USER.role,r.stage||1)){alert('You cannot act on this stage.');return;}
+ const rea=(document.getElementById('rea_'+ref).value||'').trim();if(!rea){alert('Please record why you are escalating — it is part of the reasonable-care evidence.');return;}
+ r.stage=2;r.status='Escalated — awaiting external';r.assignedTo='Bauer & Cottrell (external adviser)';r.stage1By=CURRENT_USER.name;r.stage1Reason=rea;r.slaDue=addDays(NOW,5);
+ DB.audit(ref,'Escalated to external expert (Stage 2)',CURRENT_USER.name,rea);renderNav();go('review');
+}
+function signOff(ref){
+ const r=DB.reviewFor(ref),w=DB.worker(ref);const role=CURRENT_USER&&CURRENT_USER.role;
+ if(!canActStage(role,r.stage||1)){alert('Only the designated reviewer for this stage can sign off.');return;}
+ const dec=document.getElementById('dec_'+ref).value;const rea=(document.getElementById('rea_'+ref).value||'').trim();
+ if(!dec){alert('Select a decision.');return;}
+ if(!rea){alert('Reasoning is mandatory — a bare verdict is weak reasonable-care evidence.');return;}
+ if(dec==='Needs more info'){r.status='Returned for info';r.reasoning=rea;DB.audit(ref,'Returned for more information ('+stageLabel(r.stage||1)+')',CURRENT_USER.name,rea);renderNav();go('review');return;}
+ const stageTxt=(r.stage===2)?'external expert':'internal senior reviewer';
+ r.status='Signed off ('+(r.stage===2?'external':'internal')+')';r.decision=dec;r.reasoning=rea;r.signedOffBy=CURRENT_USER.name+' — '+CURRENT_USER.title;r.signedOffAt=NOW+' '+new Date().toTimeString().slice(0,5);
+ const outcome=dec==='Outside'?'out':'in';w.outcome=outcome;w.status=dec;w.sdsState='Issued';w.nextReview=addMonths(NOW,12);w.lastSDS=NOW;
+ const sref='SDS-'+ref.replace('AS-','');DB.s.sds.push({tenantId:TENANT.id,ref:sref,workerRef:ref,outcome,issuedOn:NOW,issuedBy:'Ascend Workforce Solutions',status:'Issued',reviewBy:addMonths(NOW,12),reviewer:r.signedOffBy,reviewerReasoning:rea});
+ DB.audit(ref,'Borderline signed off by '+stageTxt,CURRENT_USER.name,'Decision: '+dec+'. '+rea);DB.audit(ref,'SDS issued','Ascend Workforce Solutions',sref+' — '+dec+' (released after '+stageTxt+' sign-off)');
+ renderNav();openSDS(ref);
+}
+function migrateReviews(){
+ DB.s.reviews.forEach(r=>{if(!r.stage)r.stage=1;if(r.stage===1&&(!r.assignedTo||r.assignedTo.indexOf('Bauer')===0)&&r.status&&r.status.indexOf('Awaiting')===0){r.assignedTo='Orsted Head of Tax (internal senior reviewer)';r.status='Awaiting internal review';}});
+ // demonstrate Stage 2: escalate AS-2322 to the external expert
+ const e=DB.reviewFor('AS-2322');if(e&&e.stage===1){e.stage=2;e.status='Escalated — awaiting external';e.assignedTo='Bauer & Cottrell (external adviser)';e.stage1By='Orsted Head of Tax';e.stage1Reason='Substitution is genuinely fettered and control is finely balanced; referring to external tax counsel for a definitive view before any SDS issues.';e.slaDue=addDays(NOW,5);}
+ DB.save();
+}
+let RESP_LOCK=null;
+function setResp(r){if(RESP_LOCK&&r!==RESP_LOCK)return;RESP=(r==='contractor')?'contractor':'client';var c=document.getElementById('segClient'),o=document.getElementById('segCon');if(c)c.classList.toggle('active',RESP==='client');if(o)o.classList.toggle('active',RESP==='contractor');}
+function applyRespLock(lock){RESP_LOCK=lock;setResp(lock||'client');var c=document.getElementById('segClient'),o=document.getElementById('segCon'),pf=document.getElementById('prefill');if(c)c.classList.toggle('disabled',lock==='contractor');if(o)o.classList.toggle('disabled',lock==='client');if(pf)pf.style.display=(lock==='contractor')?'none':'';}
+buildLoginUI();
+
+</script></body></html>
